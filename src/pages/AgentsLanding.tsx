@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 
 const TRACKS = [
   {
-    track: "Track A: External",
+    track: "TRACK_A: EXTERNAL",
     desc: "Any ERC-8004 agent. Technical verification.",
     cost: "50–300 HOOTS",
   },
   {
-    track: "Track B: Native",
+    track: "TRACK_B: NATIVE",
     desc: "Built in Hoot Browser. Full trust inheritance.",
-    cost: "Included",
+    cost: "INCLUDED",
   },
 ];
 
@@ -23,32 +23,25 @@ export default function AgentsLanding() {
       <Navbar />
 
       {/* ── HERO ── */}
-      <section className="pt-32 pb-20 px-6 md:px-12">
-        <div className="max-w-[1200px] mx-auto">
+      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10">
+        <div className="max-w-[1400px] mx-auto">
           <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4">
-              Hoot for Agents
+            <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
+              [ AGENT_VERIFICATION ]
             </div>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.95] mb-6 max-w-4xl">
-              Trust for the<br />
-              <span className="italic text-primary">agent economy.</span>
+            <h1 className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight">
+              TRUST FOR THE<br />AGENT ECONOMY.
             </h1>
-            <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
+            <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8">
               Autonomous agents need more than code. They need accountable humans behind them.
               Hoot connects agent capability to human reputation.
             </p>
             <div className="flex gap-3 flex-wrap">
-              <a
-                href="#"
-                className="px-7 py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
-              >
-                Register Agent
+              <a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
+                REGISTER_AGENT
               </a>
-              <a
-                href="#"
-                className="px-7 py-3 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors"
-              >
-                Get Credential
+              <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+                GET_CREDENTIAL
               </a>
             </div>
           </ScrollReveal>
@@ -56,109 +49,113 @@ export default function AgentsLanding() {
       </section>
 
       {/* ── THE GAP ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto">
+      <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
+        <div className="max-w-[1400px] mx-auto">
           <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-destructive mb-3">The Gap</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-6 max-w-2xl">
-              1.2 million <span className="italic text-destructive">unverified agents</span><br />
-              in one week.
+            <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">
+              [ CRITICAL_GAP ]
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 max-w-3xl uppercase tracking-tight">
+              1.2 MILLION UNVERIFIED<br />AGENTS IN ONE WEEK.
             </h2>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
             <div className="max-w-3xl space-y-4">
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base text-muted-foreground leading-relaxed">
                 The agent economy is growing faster than its trust infrastructure.
                 Current solutions verify one thing at a time — identity, or security, or feedback.
                 Not the full picture.
               </p>
-              <p className="text-lg text-foreground font-medium leading-relaxed">
-                Hoot verifies the full stack: the code, the security, the performance,
-                the on-chain history — and the human who built it.
-              </p>
+              <div className="border border-foreground/10 p-4">
+                <p className="text-sm font-bold text-foreground uppercase tracking-tight">
+                  Hoot verifies the full stack: the code, the security, the performance,
+                  the on-chain history — and the human who built it.
+                </p>
+              </div>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ── SCENARIO: BUILD TRUST ONCE ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto">
+      {/* ── SCENARIO ── */}
+      <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
+        <div className="max-w-[1400px] mx-auto">
           <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Scenario</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-10 max-w-2xl">
-              Build trust once.<br />
-              <span className="italic text-primary">Deploy everywhere.</span>
+            <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
+              [ SCENARIO_BUILD_TRUST ]
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-10 uppercase tracking-tight">
+              BUILD TRUST ONCE.<br />DEPLOY EVERYWHERE.
             </h2>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
             <ScrollReveal>
-              <div className="bg-card border border-border rounded-2xl overflow-hidden">
-                <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-border">
-                  <div className="flex gap-1.5">
-                    {["bg-destructive", "bg-hoot-orange", "bg-hoot-green"].map((c, i) => (
-                      <div key={i} className={`w-2.5 h-2.5 rounded-full ${c}`} />
-                    ))}
-                  </div>
-                  <div className="text-xs font-bold text-foreground tracking-tight">AGENT CREDENTIAL</div>
+              <div className="border-b md:border-b-0 md:border-r border-foreground/10">
+                <div className="bg-secondary px-4 py-2.5 border-b border-foreground/10">
+                  <span className="font-mono text-xs font-bold text-foreground">AGENT_CREDENTIAL</span>
                 </div>
                 <div className="p-5 space-y-4">
-                  <div className="text-[10px] font-bold text-muted-foreground tracking-wider">YOUR REPUTATION → YOUR AGENT'S TRUST</div>
+                  <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider">YOUR REPUTATION → YOUR AGENT'S TRUST</div>
 
-                  <div className="border border-border rounded-lg p-3">
-                    <div className="text-xs text-muted-foreground mb-1">You: 14 months of verified AI work</div>
-                    <div className="text-sm font-semibold text-foreground">Trust tier: <span className="text-primary">GOLD</span></div>
+                  <div className="border border-foreground/10 p-3">
+                    <div className="font-mono text-[10px] text-muted-foreground mb-1">14 months of verified AI work</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-foreground">Trust tier:</span>
+                      <span className="font-mono text-[10px] font-bold border border-hoot-green text-hoot-green px-1.5 py-0.5">GOLD</span>
+                    </div>
                   </div>
 
-                  <div className="border border-border rounded-lg p-3">
-                    <div className="text-xs text-muted-foreground mb-2">Your agent:</div>
+                  <div className="border border-foreground/10 p-3">
+                    <div className="font-mono text-[10px] text-muted-foreground mb-2">YOUR AGENT:</div>
                     <div className="space-y-1.5 text-sm text-foreground">
-                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Code verified</div>
-                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Security scanned</div>
-                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Performance tested</div>
-                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Trust inherited from you</div>
+                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Code verified</div>
+                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Security scanned</div>
+                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Performance tested</div>
+                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Trust inherited from you</div>
                     </div>
                   </div>
 
                   <motion.div
-                    className="border-t border-border pt-3 text-sm text-muted-foreground space-y-1.5"
+                    className="border-t border-foreground/10 pt-3 font-mono text-[11px] space-y-1"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
                     viewport={{ once: true }}
                   >
-                    <p className="text-foreground font-medium">
-                      Autonomy with accountability.
-                    </p>
-                    <p>Agent succeeds → your trust grows.</p>
-                    <p>Agent fails → your trust is at stake.</p>
+                    <p className="text-foreground font-bold">AUTONOMY WITH ACCOUNTABILITY.</p>
+                    <p className="text-muted-foreground">Agent succeeds → your trust grows.</p>
+                    <p className="text-muted-foreground">Agent fails → your trust is at stake.</p>
                   </motion.div>
                 </div>
               </div>
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <div className="flex flex-col justify-center space-y-6">
-                <p className="text-lg text-muted-foreground leading-relaxed">
+              <div className="p-6 md:p-8 flex flex-col justify-center space-y-5">
+                <p className="text-base text-muted-foreground leading-relaxed">
                   Other agents and services can verify that your agent is backed
                   by a real, accountable human with a real track record.
                 </p>
-                <p className="text-lg text-foreground font-medium leading-relaxed">
-                  Your reputation follows your agent. Build trust once, deploy everywhere.
-                </p>
+                <div className="border border-foreground/10 p-4">
+                  <p className="text-sm font-bold text-foreground uppercase tracking-tight">
+                    Your reputation follows your agent. Build trust once, deploy everywhere.
+                  </p>
+                </div>
 
                 {/* Two Tracks */}
-                <div className="space-y-3 mt-4">
-                  <div className="text-xs font-bold tracking-[0.15em] uppercase text-muted-foreground">Two Tracks</div>
+                <div className="space-y-0 mt-4 border border-foreground/10">
+                  <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider bg-secondary px-3 py-2 border-b border-foreground/10">
+                    TWO_TRACKS
+                  </div>
                   {TRACKS.map((t, i) => (
-                    <div key={i} className="bg-secondary rounded-lg p-4 flex justify-between items-start">
+                    <div key={i} className={`flex justify-between items-start p-3 ${i === 0 ? "border-b border-foreground/10" : ""}`}>
                       <div>
-                        <div className="text-sm font-semibold text-foreground">{t.track}</div>
-                        <div className="text-xs text-muted-foreground mt-0.5">{t.desc}</div>
+                        <div className="text-xs font-bold text-foreground">{t.track}</div>
+                        <div className="font-mono text-[10px] text-muted-foreground mt-0.5">{t.desc}</div>
                       </div>
-                      <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded shrink-0">{t.cost}</span>
+                      <span className="font-mono text-[10px] font-bold text-foreground border border-foreground/10 px-1.5 py-0.5 shrink-0">{t.cost}</span>
                     </div>
                   ))}
                 </div>
@@ -169,18 +166,20 @@ export default function AgentsLanding() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto text-center">
+      <section className="py-20 px-6 md:px-10 border-b border-foreground/10">
+        <div className="max-w-[1400px] mx-auto text-center">
           <ScrollReveal>
-            <p className="font-display text-2xl text-muted-foreground mb-8 italic max-w-lg mx-auto">
-              "30K+ agents on ERC-8004. 0 verified. Be first."
-            </p>
+            <div className="border border-foreground/10 p-8 mb-8 inline-block">
+              <p className="font-mono text-base text-muted-foreground">
+                30K+ agents on ERC-8004. <span className="text-destructive font-bold">0 verified.</span> Be first.
+              </p>
+            </div>
             <div className="flex gap-3 justify-center flex-wrap">
-              <a href="#" className="px-8 py-3.5 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors">
-                Register Agent
+              <a href="#" className="px-8 py-3.5 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
+                REGISTER_AGENT
               </a>
-              <Link to="/" className="px-8 py-3.5 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors">
-                Download Browser
+              <Link to="/" className="px-8 py-3.5 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+                DOWNLOAD_BROWSER
               </Link>
             </div>
           </ScrollReveal>

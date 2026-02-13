@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,47 +6,47 @@
 
 @layer base {
   :root {
-    --background: 40 7% 93%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 4%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card-foreground: 0 0% 4%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 4%;
 
-    --primary: 223 100% 50%;
+    --primary: 0 0% 4%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 40 5% 96%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 4%;
 
-    --muted: 40 5% 96%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 40 5% 96%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 5 76% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 6% 87%;
-    --input: 40 6% 87%;
-    --ring: 223 100% 50%;
+    --border: 0 0% 82%;
+    --input: 0 0% 82%;
+    --ring: 0 0% 4%;
 
-    --radius: 0.75rem;
+    --radius: 0px;
 
-    /* Custom tokens */
+    /* Hoot tokens */
     --hoot-black: 0 0% 4%;
-    --hoot-blue: 223 100% 50%;
-    --hoot-red: 5 76% 50%;
     --hoot-green: 155 100% 33%;
+    --hoot-red: 5 76% 50%;
     --hoot-orange: 28 79% 52%;
     --hoot-purple: 248 73% 65%;
-    --hoot-warm-gray: 40 7% 93%;
+    --hoot-blue: 223 100% 50%;
+    --hoot-warm-gray: 0 0% 96%;
     --hoot-surface: 0 0% 100%;
-    --hoot-surface-alt: 40 9% 96%;
-    --hoot-text: 0 0% 10%;
+    --hoot-surface-alt: 0 0% 97%;
+    --hoot-text: 0 0% 4%;
     --hoot-text-mid: 0 0% 33%;
     --hoot-text-dim: 0 0% 53%;
     --hoot-text-faint: 0 0% 67%;
@@ -67,20 +67,25 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans;
-    font-family: 'DM Sans', sans-serif;
+    @apply bg-background text-foreground;
+    font-family: 'Space Grotesk', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
   }
   .font-body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .font-mono-label {
+    font-family: 'Space Mono', monospace;
   }
 }
 
