@@ -1,105 +1,98 @@
+import { useState } from "react";
 import { ScrollReveal } from "@/components/hoot/ScrollReveal";
-import { BrowserDemo } from "@/components/hoot/BrowserDemo";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
-const PARTNERS = ["NVIDIA", "0G Labs", "Arbitrum", "Base", "Alchemy", "Google", "AppWorks", "Seedify"];
+const PARTNERS = ["NVIDIA Inception", "Google for Startups", "Alchemy", "Arbitrum"];
 
-const ASSETS = [
+const SCENARIOS = [
   {
-    title: "PPAP",
-    subtitle: "Proof of AI Provenance",
-    desc: "Cryptographically verified AI learning data. ERC-721 NFT registered on-chain with zkTLS proof.",
-    icon: "💎",
+    tab: "Crypto Analysis + Data Assets",
+    mockup: [
+      { role: "user", text: '"Should I buy SOL now?"' },
+      {
+        role: "ai",
+        lines: [
+          "Zone Analysis: RANGE_HIGH · CROWDED_LONG",
+          "7-Layer Score: Entry LONG 28 / SHORT 72",
+          "Recommendation: Hold. Short positions overcrowded.",
+        ],
+      },
+    ],
+    statusBar: "PPAP auto-generating... ✓ Data assets created today: 12",
+    desc: [
+      "Ask AI for trading analysis.",
+      "Your conversations automatically become verified data assets.",
+      "Analysis + asset building, simultaneously.",
+    ],
   },
   {
-    title: "HumanPassport",
-    subtitle: "5-Axis Trust Identity",
-    desc: "Soulbound Token measuring Identity, Activity, Quality, Reputation, and Compliance.",
-    icon: "🛡",
-  },
-  {
-    title: "Agent Credential",
-    subtitle: "Inherited Trust Score",
-    desc: "ERC-8004 + metadata. Agents inherit trust from their verified human creator.",
-    icon: "🤖",
+    tab: "AI Orchestration + Data Assets",
+    mockup: [
+      { role: "user", text: '"Write this week\'s report"' },
+      {
+        role: "ai",
+        lines: [
+          "Starting workflow.",
+          "Step 1: Perplexity → Collect latest market data ✓",
+          "Step 2: Claude → Draft report ✓",
+          "Step 3: Gmail → Send to team ✓",
+        ],
+      },
+    ],
+    statusBar: "3 AI Skills used · 3 PPAPs generated · HootClaw 700+ Skills",
+    desc: [
+      "Connect multiple AIs in one browser.",
+      "Data assets are auto-generated every session.",
+      "AI productivity + data ownership.",
+    ],
   },
 ];
 
-const CRISES = [
+const STEPS = [
   {
     num: "01",
-    title: "Data Exhaustion",
-    desc: "High-quality human training data runs out 2026–2028. AI companies paying hundreds of millions. Creators received $0.",
-    metrics: [
-      { label: "Reddit licensing deal", value: "$203M" },
-      { label: "Scale AI round", value: "$870M" },
-      { label: "Creator revenue", value: "$0" },
-    ],
+    title: "Use AI as usual",
+    desc: "Use any AI service — ChatGPT, Claude, Gemini, Perplexity — inside Hoots Browser. No extra steps.",
+    icon: "🌐",
+    link: null,
   },
   {
     num: "02",
-    title: "Model Collapse",
-    desc: "AI training on AI output degrades quality ~50% by 5th generation. ~60% of web text already synthetic.",
-    metrics: [
-      { label: "5th gen quality loss", value: "~50%" },
-      { label: "Synthetic web content", value: "~60%" },
-      { label: "EU Art.53 deadline", value: "Aug 2026" },
-    ],
+    title: "Automatically verified",
+    desc: "Your AI sessions are cryptographically proven in a tamper-proof way. No one can see your conversation content.",
+    icon: "🔒",
+    link: { label: "How verification works →", to: "/protocol" },
   },
   {
     num: "03",
-    title: "Agent Trust Gap",
-    desc: "Agents execute tasks without trust verification. Moltbook: 1.2M fake agents in one week.",
-    metrics: [
-      { label: "ERC-8004 agents", value: "30K+" },
-      { label: "x402 payments", value: "100M+" },
-      { label: "Moltbook fakes", value: "1.2M/week" },
-    ],
+    title: "Becomes your asset",
+    desc: "Verified data is minted as an on-chain asset (PPAP) owned by you. License it to AI companies as training data.",
+    icon: "💎",
+    link: { label: "Revenue structure →", to: "/protocol#data-hub" },
   },
 ];
 
-const PIPELINE = [
-  { step: "01", name: "Session Capture", tech: "zkTLS 2PC-HMAC" },
-  { step: "02", name: "Content Hash", tech: "SHA-256" },
-  { step: "03", name: "Notary Selection", tech: "Chainlink VRF" },
-  { step: "04", name: "Proof Verify", tech: "zkTLS verification" },
-  { step: "05", name: "Consensus", tech: "FROST 5-of-5" },
-  { step: "06", name: "Quality Score", tech: "CQS SLM Estimator" },
-  { step: "07", name: "On-chain Register", tech: "Arbitrum L2" },
-  { step: "08", name: "Data Storage", tech: "0G Labs" },
-  { step: "09", name: "Challenge Window", tech: "72h open" },
-  { step: "10", name: "Marketplace List", tech: "DATA HUB" },
-];
-
-const CQS_GRADES = [
-  { grade: "REJECTED", range: "0–0.19", chars: "Spam, gibberish", mult: "0x" },
-  { grade: "BASIC", range: "0.20–0.39", chars: "Simple Q&A", mult: "0.5x" },
-  { grade: "STANDARD", range: "0.40–0.59", chars: "Substantive depth", mult: "1.0x" },
-  { grade: "GOLD", range: "0.60–0.79", chars: "Multi-turn, domain expertise", mult: "2.0x" },
-  { grade: "ELITE", range: "0.80–0.94", chars: "Complex workflow", mult: "2.0x" },
-  { grade: "MASTER", range: "0.95–1.00", chars: "Expert multi-agent", mult: "2.0x" },
-];
-
-const PASSPORT_AXES = [
-  { axis: "Identity", weight: "20%", measures: "Wallet age, DID, social links" },
-  { axis: "Activity", weight: "15%", measures: "PPAP frequency, session diversity" },
-  { axis: "Quality", weight: "30%", measures: "Average CQS, GOLD+ ratio" },
-  { axis: "Reputation", weight: "20%", measures: "Buyer ratings, challenge success" },
-  { axis: "Compliance", weight: "15%", measures: "Metadata completeness, Art.53" },
-];
-
-const TRACTION = [
-  { label: "Phase 0 Users", value: "400K+" },
-  { label: "Daily Retention", value: "80%" },
-  { label: "B2B Revenue", value: "$22.5K" },
-  { label: "IP Models Built", value: "10+" },
-  { label: "Core Tech", value: "Implemented" },
-  { label: "Partners", value: "8+" },
+const TRUST_BLOCKS = [
+  {
+    title: "Already Proven",
+    items: ["400K users in Phase 0", "80% daily retention", "Browser + Protocol implemented"],
+  },
+  {
+    title: "Partnerships",
+    items: ["NVIDIA Inception", "Google for Startups", "Alchemy", "Arbitrum"],
+  },
+  {
+    title: "Technical Safety",
+    items: ["Forgery probability 2⁻¹²⁸", "5 independent node consensus", "Ethereum-inherited security"],
+  },
 ];
 
 export default function Index() {
+  const [activeTab, setActiveTab] = useState(0);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -109,28 +102,29 @@ export default function Index() {
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
             <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4">
-              The Proof Protocol for the AI Era
+              Hoots Browser
             </div>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.95] mb-6 max-w-4xl">
-              USE AI,<br />
-              <span className="italic text-primary">GENERATE</span><br />
-              TRAINING DATA.
+              Use AI,<br />
+              <span className="italic text-primary">build data assets.</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
-              Cryptographically prove AI data is real. Score its quality. Verify the humans and agents behind it.
+              ChatGPT, Claude, Perplexity — use them as you always do.
+              Inside Hoots Browser, your AI sessions are automatically
+              converted into verified data assets.
             </p>
             <div className="flex gap-3 flex-wrap">
-              <Link
-                to="/browser"
+              <a
+                href="#waitlist"
                 className="px-7 py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
               >
-                Try Browser
-              </Link>
+                Join Waitlist
+              </a>
               <a
-                href="#"
+                href="#scenarios"
                 className="px-7 py-3 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors"
               >
-                Read Whitepaper
+                Watch 30s Demo ↓
               </a>
             </div>
           </ScrollReveal>
@@ -139,7 +133,7 @@ export default function Index() {
           <ScrollReveal delay={0.3}>
             <div className="mt-16 pt-8 border-t border-border">
               <div className="text-[10px] font-bold tracking-[0.15em] uppercase text-muted-foreground mb-4">
-                Backed by
+                Powered by Hoots Protocol
               </div>
               <div className="flex flex-wrap gap-6 items-center">
                 {PARTNERS.map((p) => (
@@ -153,249 +147,220 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── CORE ASSETS ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
+      {/* ── USE SCENARIOS ── */}
+      <section id="scenarios" className="py-20 px-6 md:px-12 border-t border-border">
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Core Assets</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-4">
-              Three digital assets.<br />
-              <span className="italic text-primary">One trust model.</span>
+            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Use Cases</div>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-8">
+              See how it <span className="italic text-primary">works</span>
             </h2>
-            <p className="text-muted-foreground max-w-lg mb-12">
-              Human → Data → Agent. Trust flows in one direction.
-            </p>
           </ScrollReveal>
-          <div className="grid md:grid-cols-3 gap-4">
-            {ASSETS.map((a, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="bg-card border border-border rounded-xl p-6 hover:border-primary/30 transition-colors h-full">
-                  <div className="text-3xl mb-4">{a.icon}</div>
-                  <h3 className="font-display text-2xl text-foreground mb-1">{a.title}</h3>
-                  <div className="text-xs font-semibold text-primary tracking-wide uppercase mb-3">{a.subtitle}</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── THREE CRISES ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto">
-          <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-destructive mb-3">Three Crises</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-4 max-w-2xl">
-              Three things breaking <span className="italic text-destructive">simultaneously</span>.
-            </h2>
-            <p className="text-muted-foreground max-w-lg mb-12">
-              Any one is a problem. Together they threaten the AI economy.
-            </p>
+          {/* Tabs */}
+          <ScrollReveal delay={0.1}>
+            <div className="flex gap-2 mb-6">
+              {SCENARIOS.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveTab(i)}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                    activeTab === i
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {s.tab}
+                </button>
+              ))}
+            </div>
           </ScrollReveal>
-          <div className="space-y-6">
-            {CRISES.map((c, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="bg-card border border-border rounded-xl p-6 md:p-8">
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-xs font-bold text-destructive bg-destructive/10 px-2 py-0.5 rounded">
-                          {c.num}
-                        </span>
-                        <h3 className="font-display text-2xl text-foreground">{c.title}</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
-                    </div>
-                    <div className="md:w-64 shrink-0">
-                      {c.metrics.map((m, j) => (
-                        <div key={j} className="flex justify-between py-2 border-b border-border last:border-0">
-                          <span className="text-xs text-muted-foreground">{m.label}</span>
-                          <span className="text-xs font-bold text-foreground">{m.value}</span>
-                        </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Browser Mockup */}
+                <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                  {/* Title bar */}
+                  <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-border">
+                    <div className="flex gap-1.5">
+                      {["bg-destructive", "bg-hoot-orange", "bg-hoot-green"].map((c, i) => (
+                        <div key={i} className={`w-2.5 h-2.5 rounded-full ${c}`} />
                       ))}
                     </div>
+                    <div className="text-xs font-bold text-foreground tracking-tight">HOOTS BROWSER</div>
+                  </div>
+                  {/* Chat */}
+                  <div className="p-5 space-y-4">
+                    {SCENARIOS[activeTab].mockup.map((msg, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.3, duration: 0.4 }}
+                      >
+                        {msg.role === "user" ? (
+                          <div className="bg-primary/5 border border-primary/15 rounded-xl px-4 py-3">
+                            <div className="text-[10px] font-bold text-primary mb-1">YOU</div>
+                            <div className="text-sm text-foreground">{msg.text}</div>
+                          </div>
+                        ) : (
+                          <div className="bg-secondary rounded-xl px-4 py-3">
+                            <div className="text-[10px] font-bold text-muted-foreground mb-1">HOOTS AI</div>
+                            <div className="space-y-1">
+                              {msg.lines.map((line, j) => (
+                                <motion.div
+                                  key={j}
+                                  className="text-sm text-foreground font-mono"
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.5 + j * 0.2 }}
+                                >
+                                  {line}
+                                </motion.div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+                    {/* Status bar */}
+                    <motion.div
+                      className="bg-primary/5 border border-primary/15 rounded-lg px-3 py-2 flex items-center gap-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 1.2 }}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-primary animate-blink" />
+                      <span className="text-[11px] text-primary font-semibold">
+                        {SCENARIOS[activeTab].statusBar}
+                      </span>
+                    </motion.div>
                   </div>
                 </div>
-              </ScrollReveal>
-            ))}
-          </div>
+
+                {/* Description */}
+                <div className="flex flex-col justify-center">
+                  <div className="space-y-4">
+                    {SCENARIOS[activeTab].desc.map((line, i) => (
+                      <motion.p
+                        key={i}
+                        className="text-lg text-foreground leading-relaxed"
+                        initial={{ opacity: 0, x: 16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 + i * 0.15, duration: 0.4 }}
+                      >
+                        {line}
+                      </motion.p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
-      {/* ── BROWSER DEMO ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1000px] mx-auto">
-          <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Live Demo</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-2 max-w-2xl">
-              One command,<br />
-              <span className="italic text-primary">multiple agents</span>,<br />
-              verified data.
-            </h2>
-            <p className="text-muted-foreground max-w-lg mb-10">
-              Watch a real orchestration: a user asks one question — the Browser routes to three skills — and a PPAP captures the entire journey.
-            </p>
-          </ScrollReveal>
-          <BrowserDemo />
-        </div>
-      </section>
-
-      {/* ── 5-STEP PROOF STACK ── */}
+      {/* ── HOW IT WORKS — 3 STEPS ── */}
       <section className="py-20 px-6 md:px-12 border-t border-border">
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
             <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">How It Works</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-4">
-              5-Step <span className="italic text-primary">Proof Stack</span>
-            </h2>
-            <div className="flex flex-wrap gap-2 items-center mb-4">
-              {["01 Capture", "02 Verify", "03 Score", "04 Register", "05 Trade"].map((s, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <span className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-lg text-xs font-bold text-primary">
-                    {s}
-                  </span>
-                  {i < 4 && <span className="text-muted-foreground/30">→</span>}
-                </div>
-              ))}
-            </div>
-            <p className="text-sm text-muted-foreground mb-12">
-              Total: ~6 seconds · $0.013 · Forgery: 2⁻¹²⁸
-            </p>
-          </ScrollReveal>
-
-          {/* CQS Grade Table */}
-          <ScrollReveal>
-            <h3 className="font-display text-2xl text-foreground mb-4">CQS Grade Table</h3>
-            <div className="bg-card border border-border rounded-xl overflow-hidden mb-12">
-              <div className="grid grid-cols-4 gap-0 text-xs font-bold text-muted-foreground bg-secondary p-3 border-b border-border">
-                <div>Grade</div><div>Range</div><div>Characteristics</div><div>Multiplier</div>
-              </div>
-              {CQS_GRADES.map((g, i) => (
-                <div key={i} className="grid grid-cols-4 gap-0 text-sm p-3 border-b border-border last:border-0">
-                  <div className="font-bold text-foreground">{g.grade}</div>
-                  <div className="text-muted-foreground">{g.range}</div>
-                  <div className="text-muted-foreground">{g.chars}</div>
-                  <div className="font-semibold text-foreground">{g.mult}</div>
-                </div>
-              ))}
-            </div>
-          </ScrollReveal>
-
-          {/* HumanPassport 5-Axis */}
-          <ScrollReveal>
-            <h3 className="font-display text-2xl text-foreground mb-4">
-              HumanPassport <span className="italic text-primary">5-Axis</span>
-            </h3>
-            <div className="bg-card border border-border rounded-xl overflow-hidden mb-6">
-              <div className="grid grid-cols-3 gap-0 text-xs font-bold text-muted-foreground bg-secondary p-3 border-b border-border">
-                <div>Axis</div><div>Weight</div><div>Measures</div>
-              </div>
-              {PASSPORT_AXES.map((a, i) => (
-                <div key={i} className="grid grid-cols-3 gap-0 text-sm p-3 border-b border-border last:border-0">
-                  <div className="font-semibold text-foreground">{a.axis}</div>
-                  <div className="text-primary font-bold">{a.weight}</div>
-                  <div className="text-muted-foreground">{a.measures}</div>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-2 mb-12">
-              {["BASIC 1.0x", "SILVER 1.25x", "GOLD 1.5x", "MASTER 2.0x"].map((t) => (
-                <span key={t} className="px-3 py-1.5 text-xs font-bold border border-border rounded-lg text-foreground bg-secondary">
-                  {t}
-                </span>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ── 10-STEP PIPELINE ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto">
-          <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Technical Pipeline</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-8">
-              The 10-Step <span className="italic text-primary">Pipeline</span>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-12">
+              Three steps. <span className="italic text-primary">Zero effort.</span>
             </h2>
           </ScrollReveal>
-          <div className="overflow-x-auto pb-4">
-            <div className="flex gap-3 min-w-max">
-              {PIPELINE.map((p, i) => (
-                <ScrollReveal key={i} delay={i * 0.05}>
-                  <div className="w-[130px] bg-card border border-border rounded-xl p-4 hover:border-primary/30 transition-colors">
-                    <div className="text-xs font-bold text-primary mb-2">{p.step}</div>
-                    <div className="text-sm font-semibold text-foreground mb-1">{p.name}</div>
-                    <div className="text-[10px] text-muted-foreground">{p.tech}</div>
+
+          <div className="space-y-6">
+            {STEPS.map((s, i) => (
+              <ScrollReveal key={i} delay={i * 0.12}>
+                <div className="bg-card border border-border rounded-xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-start">
+                  <div className="flex items-center gap-4 shrink-0">
+                    <span className="text-3xl">{s.icon}</span>
+                    <span className="text-xs font-bold text-primary bg-primary/5 px-2.5 py-1 rounded">{s.num}</span>
                   </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TRACTION ── */}
-      <section className="py-20 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto">
-          <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Traction</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-8">
-              Why trust <span className="italic text-primary">Hoot</span>
-            </h2>
-          </ScrollReveal>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
-            {TRACTION.map((t, i) => (
-              <ScrollReveal key={i} delay={i * 0.05}>
-                <div className="bg-card border border-border rounded-xl p-5 text-center">
-                  <div className="text-2xl font-bold text-foreground mb-1">{t.value}</div>
-                  <div className="text-xs text-muted-foreground">{t.label}</div>
+                  <div className="flex-1">
+                    <h3 className="font-display text-2xl text-foreground mb-2">{s.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-2">{s.desc}</p>
+                    {s.link && (
+                      <Link to={s.link.to} className="text-xs font-semibold text-primary hover:underline">
+                        {s.link.label}
+                      </Link>
+                    )}
+                  </div>
+                  {/* Connecting arrow */}
+                  {i < STEPS.length - 1 && (
+                    <div className="hidden md:block text-muted-foreground/20 text-2xl self-center">↓</div>
+                  )}
                 </div>
               </ScrollReveal>
             ))}
           </div>
-          <ScrollReveal>
-            <div className="bg-card border border-border rounded-xl p-6 md:p-8">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-display text-xl text-foreground mb-2">HOOTS Token</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    ERC-20 on Arbitrum. 1B fixed supply. 7 utility types. Pre-Seed FDV $40M at $0.04.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-display text-xl text-foreground mb-2">Verification Nodes</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    4 tiers. Genesis (50 × $6K), Early (100 × $4.5K). Runs inside browser, no GPU. Total presale: $750K.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
         </div>
       </section>
 
-      {/* ── FINAL CTA ── */}
-      <section className="py-24 px-6 md:px-12 border-t border-border">
-        <div className="max-w-[1200px] mx-auto text-center">
+      {/* ── TRUST + CTA ── */}
+      <section id="waitlist" className="py-20 px-6 md:px-12 border-t border-border">
+        <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
-            <h2 className="font-display text-5xl md:text-7xl text-foreground mb-6">
-              ENTER THE<br />
-              <span className="italic text-primary">HOOT ECOSYSTEM</span>
+            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Why Trust Hoots</div>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-8">
+              Built, <span className="italic text-primary">not promised.</span>
             </h2>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link
-                to="/browser"
-                className="px-8 py-3.5 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
-              >
-                Download Browser
-              </Link>
-              <a
-                href="#"
-                className="px-8 py-3.5 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors"
-              >
-                Read Docs
-              </a>
+          </ScrollReveal>
+
+          <div className="grid md:grid-cols-3 gap-4 mb-16">
+            {TRUST_BLOCKS.map((block, i) => (
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div className="bg-card border border-border rounded-xl p-6 h-full">
+                  <h3 className="font-display text-xl text-foreground mb-4">{block.title}</h3>
+                  <ul className="space-y-2">
+                    {block.items.map((item, j) => (
+                      <li key={j} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-0.5">·</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <ScrollReveal>
+            <div className="text-center">
+              <h2 className="font-display text-5xl md:text-7xl text-foreground mb-4">
+                Browse. Analyze.<br />
+                <span className="italic text-primary">Verify. Own.</span>
+              </h2>
+              <div className="flex gap-3 justify-center flex-wrap mt-8">
+                <a
+                  href="#"
+                  className="px-8 py-3.5 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
+                >
+                  Join Waitlist
+                </a>
+                <a
+                  href="#"
+                  className="px-8 py-3.5 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors"
+                >
+                  Read Whitepaper
+                </a>
+              </div>
+              <p className="mt-6 text-sm text-muted-foreground">
+                Powered by{" "}
+                <Link to="/protocol" className="text-primary hover:underline font-semibold">
+                  Hoots Protocol
+                </Link>{" "}
+                — The Proof Layer for AI Data
+              </p>
             </div>
           </ScrollReveal>
         </div>

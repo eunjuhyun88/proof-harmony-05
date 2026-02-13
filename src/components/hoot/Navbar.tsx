@@ -12,8 +12,10 @@ export function Navbar() {
   }, []);
 
   const links = [
-    { to: "/", label: "Protocol" },
-    { to: "/browser", label: "Browser" },
+    { to: "/", label: "Browser" },
+    { to: "/protocol", label: "Protocol" },
+    { to: "/agents", label: "Agents" },
+    { to: "/docs", label: "Docs" },
   ];
 
   return (
@@ -27,7 +29,7 @@ export function Navbar() {
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-sm">H</span>
           </div>
-          <span className="font-bold text-foreground tracking-tight text-lg">HOOT</span>
+          <span className="font-bold text-foreground tracking-tight text-lg">HOOTS</span>
         </Link>
 
         <div className="flex items-center gap-1">
@@ -48,7 +50,7 @@ export function Navbar() {
             href="#"
             className="ml-3 px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
           >
-            Try Browser
+            Join Waitlist
           </a>
         </div>
       </div>
