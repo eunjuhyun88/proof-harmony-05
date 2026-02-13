@@ -1,69 +1,57 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useInView } from "@/hooks/useInView";
 
+/* ── Sarah's scenario steps ── */
 const STEPS = [
-  { id: 0, type: "user", text: "Summarize my emails, find action items, and add them to my Notion task board" },
-  { id: 1, type: "system", text: "Routing to 3 skills...", agent: "OpenClaw" },
-  { id: 2, type: "skill", text: "Scanning 47 emails from last 24h...", agent: "Gmail", icon: "✉" },
-  { id: 3, type: "skill", text: "Found 12 action items across 8 threads", agent: "Gmail", icon: "✉" },
-  { id: 4, type: "skill", text: "Summarizing with Claude...", agent: "Claude", icon: "◆" },
-  { id: 5, type: "skill", text: "Creating 12 tasks in 'Action Items' board", agent: "Notion", icon: "□" },
-  { id: 6, type: "result", text: "Done. 12 tasks added. 3 flagged as urgent." },
-  { id: 7, type: "ppap", text: "PPAP captured · L1 Prompt + L3 Orchestration (Gmail → Claude → Notion) + L4 Feedback" },
+  { id: 0, type: "user", text: "Claude, write 3 email subject lines for our spring campaign" },
+  { id: 1, type: "ai", text: "Here are 3 options:\n1. \"Spring Into Savings — 30% Off Everything\"\n2. \"Your Spring Refresh Starts Now\"\n3. \"Don't Miss Our Biggest Spring Sale\"" },
+  { id: 2, type: "user", text: "#2 is good but make it shorter" },
+  { id: 3, type: "ai", text: "Shortened: \"Spring Refresh Starts Now\"" },
+  { id: 4, type: "user", text: "Perfect. Schedule it for Monday 9am" },
+  { id: 5, type: "ai", text: "Routing to Gmail skill...\n✓ Campaign email scheduled for Monday 9:00 AM\n✓ Subject: \"Spring Refresh Starts Now\"\n✓ Recipients: spring-list (2,847 contacts)" },
+  { id: 6, type: "verify", text: "Session verified" },
 ];
 
-const DELAYS = [0, 1200, 2200, 3500, 4200, 5400, 6600, 7400];
+const DELAYS = [0, 1800, 3400, 4800, 6200, 7600, 9200];
 
-const SKILLS = [
-  { name: "Gmail", icon: "✉" },
-  { name: "Claude", icon: "◆" },
-  { name: "Notion", icon: "□" },
-  { name: "Slack", icon: "◇" },
-  { name: "GitHub", icon: "⊙" },
-  { name: "Calendar", icon: "◫" },
-  { name: "Perplexity", icon: "◉" },
+const VERIFY_ITEMS = [
+  { label: "Cryptographically proven", detail: "zkTLS" },
+  { label: "Quality-scored", detail: "GOLD" },
+  { label: "Registered on-chain as Sarah's", detail: "" },
+  { label: "Encrypted. Only Sarah holds the key.", detail: "" },
+];
+
+const VERIFY_PIPELINE = [
+  { label: "TLS Capture", stage: 1 },
+  { label: "zkTLS Proof", stage: 1 },
+  { label: "FROST 5-of-5", stage: 2, sub: "5 Notaries" },
+  { label: "CQS Score", stage: 3, sub: "GOLD" },
+  { label: "PPAP Mint", stage: 4, sub: "ERC-721" },
 ];
 
 const LAYERS = [
-  { label: "L1", name: "Prompt", desc: "User command captured", canSynth: true },
-  { label: "L2", name: "Response", desc: "AI outputs recorded", canSynth: true },
-  { label: "L3", name: "Orchestration", desc: "Gmail → Claude → Notion sequence", canSynth: false },
-  { label: "L4", name: "Feedback", desc: "User corrections tracked", canSynth: false },
-];
-
-const EMAILS = [
-  { from: "Sarah Kim", subject: "Q1 Budget Review — needs approval by Friday", time: "10:23 AM", urgent: true },
-  { from: "Dev Team", subject: "Deploy v2.3 release candidate to staging", time: "9:47 AM", urgent: false },
-  { from: "Alex Chen", subject: "Partnership proposal — DataCorp AI", time: "9:15 AM", urgent: true },
-  { from: "HR", subject: "Updated remote work policy", time: "8:30 AM", urgent: false },
-  { from: "Mike Lee", subject: "Design review for new dashboard", time: "Yesterday", urgent: false },
-  { from: "Jenkins CI", subject: "[FAILED] Build #4521 — main branch", time: "Yesterday", urgent: true },
-  { from: "Board", subject: "Quarterly board meeting agenda", time: "Yesterday", urgent: false },
-];
-
-const PIPELINE_STEPS = [
-  { label: "TLS Capture", stage: 1 },
-  { label: "zkTLS Proof", stage: 2 },
-  { label: "FROST 5-of-5", stage: 2, sub: "5 Notaries" },
-  { label: "CQS Score", stage: 3, sub: "8.4 / 10" },
-  { label: "PPAP Mint", stage: 4, sub: "ERC-721" },
-  { label: "DATA HUB", stage: 5, sub: "Listed for B2B" },
+  { label: "L1", name: "Prompt", desc: "Sarah's commands captured", canSynth: true },
+  { label: "L2", name: "Response", desc: "Claude's outputs recorded", canSynth: true },
+  { label: "L3", name: "Orchestration", desc: "Claude → Gmail skill sequence", canSynth: false },
+  { label: "L4", name: "Feedback", desc: "Sarah's corrections (#2 → shorter)", canSynth: false },
 ];
 
 export function BrowserDemo() {
   const [step, setStep] = useState(-1);
   const [playing, setPlaying] = useState(false);
-  const [ppapStage, setPpapStage] = useState(0);
+  const [verifyStage, setVerifyStage] = useState(0); // 0-4
+  const [monetization, setMonetization] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const { ref: sectionRef, inView } = useInView({ threshold: 0.25 });
+  const { ref: sectionRef, inView } = useInView({ threshold: 0.2 });
 
   const reset = useCallback(() => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
     setStep(-1);
-    setPpapStage(0);
+    setVerifyStage(0);
+    setMonetization(false);
   }, []);
 
   const play = useCallback(() => {
@@ -74,9 +62,9 @@ export function BrowserDemo() {
       timers.current.push(
         setTimeout(() => {
           setStep(s.id);
-          if (s.type === "ppap") {
-            [400, 1200, 2000, 2800].forEach((d, j) =>
-              timers.current.push(setTimeout(() => setPpapStage(j + 1), d))
+          if (s.type === "verify") {
+            [500, 1200, 2000, 2800].forEach((d, j) =>
+              timers.current.push(setTimeout(() => setVerifyStage(j + 1), d))
             );
             timers.current.push(setTimeout(() => setPlaying(false), 3400));
           }
@@ -101,9 +89,8 @@ export function BrowserDemo() {
   }, []);
 
   const visible = STEPS.filter((s) => s.id <= step);
-  const active = new Set(visible.filter((s) => s.type === "skill").map((s) => s.agent));
-  const showPpap = step >= 7;
-  const done = ppapStage >= 4;
+  const showVerify = step >= 6;
+  const done = verifyStage >= 4;
 
   return (
     <div ref={sectionRef}>
@@ -116,24 +103,24 @@ export function BrowserDemo() {
             <div className="w-3 h-3 rounded-full bg-hoot-orange" />
             <div className="w-3 h-3 rounded-full bg-hoot-green" />
           </div>
-          <div className="text-sm font-bold text-foreground tracking-tight">HOOTS BROWSER</div>
+          <div className="text-sm font-bold text-foreground tracking-tight">HOOT BROWSER</div>
           <div className="flex-1 ml-2 bg-background rounded-lg px-3.5 py-1.5 border border-border text-xs text-muted-foreground truncate">
-            mail.google.com — 47 unread
+            claude.ai — Sarah's workspace
           </div>
           <div className="text-xs text-muted-foreground font-mono hidden sm:block">
-            <span className="text-hoot-green">●</span> 0xd368…ff59
+            <span className="text-hoot-green">●</span> Sarah.eth
           </div>
         </div>
 
         {/* Browser body */}
-        <div className="flex min-h-[420px]">
+        <div className="flex min-h-[440px]">
           {/* Sidebar */}
           <div className="w-14 bg-secondary border-r border-border py-4 flex-col items-center gap-5 hidden md:flex">
             {[
               { icon: "🌐", label: "Browse", on: true },
               { icon: "🏠", label: "Hub", on: false },
               { icon: "💎", label: "PPAP", on: false },
-              { icon: "💳", label: "Wallet", on: false },
+              { icon: "🔑", label: "Keys", on: false },
             ].map((item, i) => (
               <div key={i} className={`text-center ${item.on ? "opacity-100" : "opacity-30"}`}>
                 <div className="text-lg">{item.icon}</div>
@@ -144,164 +131,262 @@ export function BrowserDemo() {
             ))}
           </div>
 
-          {/* Main content — email list */}
-          <div className="flex-1 p-4 border-r border-border flex flex-col min-w-0">
-            {/* Tabs */}
-            <div className="flex gap-1 mb-3">
-              {["Gmail — Inbox", "claude.ai", "notion.so"].map((tab, i) => (
+          {/* Main chat area */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Chat messages */}
+            <div ref={chatRef} className="flex-1 overflow-auto p-4 space-y-3">
+              {visible.filter(s => s.type !== "verify").map((s) => (
                 <div
-                  key={i}
-                  className={`rounded-lg px-3 py-1.5 text-[11px] flex items-center gap-1.5 ${
-                    i === 0
-                      ? "bg-card border border-border font-semibold text-foreground"
-                      : "text-muted-foreground"
-                  }`}
+                  key={s.id}
+                  className="animate-fade-up"
                 >
-                  {tab}
-                  {i > 0 && step >= 4 + i && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-hoot-green inline-block" />
+                  {s.type === "user" ? (
+                    <div className="flex justify-end">
+                      <div className="bg-primary/5 border border-primary/15 rounded-xl px-4 py-3 max-w-[85%]">
+                        <div className="text-[10px] font-bold text-primary mb-1">SARAH</div>
+                        <div className="text-sm text-foreground">{s.text}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-start">
+                      <div className="bg-secondary rounded-xl px-4 py-3 max-w-[85%]">
+                        <div className="text-[10px] font-bold text-muted-foreground mb-1">CLAUDE</div>
+                        <div className="text-sm text-foreground whitespace-pre-line font-mono leading-relaxed">
+                          {s.text}
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
               ))}
-            </div>
 
-            {/* Emails */}
-            <div className="flex-1 space-y-0.5">
-              {EMAILS.map((email, i) => {
-                const scanned = step >= 2;
-                const tagged = step >= 3 && email.urgent;
-                return (
-                  <div
-                    key={i}
-                    className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md transition-all duration-400 ${
-                      tagged ? "bg-primary/5 border-l-[3px] border-l-primary" : "border-l-[3px] border-l-transparent"
-                    } ${scanned ? "opacity-100" : "opacity-40"}`}
-                  >
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                        email.urgent ? "bg-destructive" : "bg-muted-foreground/40"
-                      }`}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-foreground truncate">{email.from}</div>
-                      <div className="text-[11px] text-muted-foreground truncate">{email.subject}</div>
+              {/* Typing indicator */}
+              {step >= 0 && step < 6 && step % 2 === 0 && (
+                <div className="flex justify-start">
+                  <div className="bg-secondary rounded-xl px-4 py-3">
+                    <div className="text-[10px] font-bold text-muted-foreground mb-1">CLAUDE</div>
+                    <div className="flex gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40 animate-blink" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40 animate-blink" style={{ animationDelay: "0.2s" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40 animate-blink" style={{ animationDelay: "0.4s" }} />
                     </div>
-                    <div className="text-[10px] text-muted-foreground/60 shrink-0">{email.time}</div>
-                    {tagged && <div className="text-[9px] text-primary font-bold shrink-0">→ task</div>}
                   </div>
-                );
-              })}
+                </div>
+              )}
+
+              {/* Verification Card */}
+              {showVerify && (
+                <div className="animate-fade-up">
+                  <div className="bg-card border-2 border-primary/20 rounded-xl px-5 py-4 max-w-[90%] mx-auto">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`w-2 h-2 rounded-full bg-primary ${verifyStage < 4 ? "animate-blink" : ""}`} />
+                      <span className="text-[10px] font-bold text-primary tracking-wider">
+                        {verifyStage < 4 ? "VERIFYING SESSION..." : "SESSION VERIFIED"}
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {VERIFY_ITEMS.map((item, i) => (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-2 transition-opacity duration-300 ${
+                            verifyStage > i ? "opacity-100" : "opacity-20"
+                          }`}
+                        >
+                          <span className="text-primary text-sm">✓</span>
+                          <span className="text-sm text-foreground">{item.label}</span>
+                          {item.detail && (
+                            <span className="text-[10px] font-bold text-primary bg-primary/5 px-1.5 py-0.5 rounded ml-auto">
+                              {item.detail}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Monetization toggle */}
+                    {done && (
+                      <div className="mt-4 pt-3 border-t border-border animate-fade-up">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-xs text-muted-foreground">
+                              Monetization: <span className="font-bold text-foreground">{monetization ? "ON" : "OFF"}</span>
+                            </div>
+                            <div className="text-[10px] text-muted-foreground mt-0.5">
+                              {monetization
+                                ? "Listed on DATA HUB. AI companies can license this data."
+                                : "Your data stays private. Turn ON to list on DATA HUB."}
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setMonetization(!monetization)}
+                            className={`w-10 h-5 rounded-full relative transition-colors duration-200 shrink-0 ${
+                              monetization ? "bg-primary" : "bg-border"
+                            }`}
+                          >
+                            <div
+                              className={`w-4 h-4 rounded-full bg-card shadow absolute top-0.5 transition-transform duration-200 ${
+                                monetization ? "translate-x-5" : "translate-x-0.5"
+                              }`}
+                            />
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-primary/70 mt-2 italic">
+                          Your work. Your proof. Your choice to share.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* PPAP capture bar */}
-            {showPpap && (
-              <div className="mt-2.5 px-3 py-2 bg-primary/5 border border-primary/15 rounded-lg flex items-center gap-2 animate-fade-up">
-                <div className={`w-2 h-2 rounded-full bg-primary ${ppapStage < 4 ? "animate-blink" : ""}`} />
-                <span className="text-[11px] text-primary font-semibold">
-                  {ppapStage === 0 && "Capturing session..."}
-                  {ppapStage === 1 && "zkTLS session proof generating..."}
-                  {ppapStage === 2 && "FROST 5-of-5 consensus — 5/5 Notaries signed"}
-                  {ppapStage === 3 && "CQS Score: 8.4 / 10 — Minting PPAP..."}
-                  {ppapStage === 4 && "PPAP #18,429 minted ✓ — L1 + L3 + L4 verified"}
-                </span>
+            {/* Input */}
+            <div className="px-4 pb-3">
+              <div className="bg-secondary rounded-xl px-4 py-2.5 border border-border flex items-center gap-2">
+                <span className="text-sm text-muted-foreground/60 flex-1">Ask Claude anything...</span>
+                <button
+                  onClick={!playing ? play : undefined}
+                  disabled={playing}
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                    playing ? "bg-muted-foreground/30 cursor-default" : "bg-primary cursor-pointer hover:bg-primary/90"
+                  }`}
+                >
+                  <span className="text-xs text-primary-foreground font-bold">{playing ? "…" : "▶"}</span>
+                </button>
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Right — Agent panel */}
-          <div className="w-[220px] lg:w-[260px] bg-secondary p-3 flex flex-col gap-2 hidden md:flex">
+          {/* Right panel — Session Info */}
+          <div className="w-[220px] lg:w-[240px] bg-secondary p-3 flex flex-col gap-3 hidden md:flex border-l border-border">
             <div className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
-              Agent Panel
+              Session Info
             </div>
 
-            {/* Skills */}
-            <div className="flex flex-col gap-0.5">
-              {SKILLS.map((sk, i) => {
-                const on = active.has(sk.name);
-                return (
+            {/* Creator card */}
+            <div className="bg-card rounded-lg p-3 border border-border">
+              <div className="text-[10px] font-bold text-muted-foreground tracking-wider mb-1">CREATOR</div>
+              <div className="text-sm font-semibold text-foreground">Sarah Kim</div>
+              <div className="text-[10px] text-muted-foreground mt-0.5">HumanPassport verified</div>
+              <div className="flex items-center gap-1.5 mt-2">
+                <span className="text-[10px] font-bold text-primary bg-primary/5 px-1.5 py-0.5 rounded">GOLD</span>
+                <span className="text-[10px] text-muted-foreground">Trust Score: 78</span>
+              </div>
+            </div>
+
+            {/* Skills used */}
+            <div className="bg-card rounded-lg p-3 border border-border">
+              <div className="text-[10px] font-bold text-muted-foreground tracking-wider mb-2">SKILLS USED</div>
+              <div className="space-y-1.5">
+                {[
+                  { name: "Claude", icon: "◆", active: step >= 1 },
+                  { name: "Gmail", icon: "✉", active: step >= 5 },
+                ].map((sk, i) => (
                   <div
                     key={i}
                     className={`flex items-center gap-2 px-2 py-1.5 rounded-md transition-all duration-300 ${
-                      on ? "bg-primary/5 border border-primary/15" : "border border-transparent"
+                      sk.active ? "bg-primary/5 border border-primary/15" : "border border-transparent opacity-40"
                     }`}
                   >
-                    <span className={`text-sm leading-none ${on ? "text-foreground" : "text-muted-foreground/40"}`}>
-                      {sk.icon}
-                    </span>
-                    <span className={`text-[11px] flex-1 ${on ? "text-foreground font-semibold" : "text-muted-foreground/40"}`}>
+                    <span className="text-sm">{sk.icon}</span>
+                    <span className={`text-[11px] flex-1 ${sk.active ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
                       {sk.name}
                     </span>
-                    {on && (
+                    {sk.active && (
                       <span className="text-[8px] font-bold text-hoot-green bg-hoot-green/10 px-1.5 py-0.5 rounded">
                         ACTIVE
                       </span>
                     )}
                   </div>
-                );
-              })}
-              <div className="text-[10px] text-muted-foreground/60 text-center py-1.5">700+ MCP Skills</div>
+                ))}
+              </div>
+              <div className="text-[10px] text-muted-foreground/60 text-center pt-2">700+ MCP Skills available</div>
             </div>
 
-            {/* Log */}
-            <div className="flex-1 flex flex-col">
-              <div className="text-[9px] font-bold tracking-wider text-muted-foreground mb-1 uppercase">
-                Orchestration Log
-              </div>
-              <div ref={chatRef} className="flex-1 overflow-auto flex flex-col gap-1 max-h-[200px] scrollbar-none">
-                {visible.map((s) => {
-                  const bgClass =
-                    s.type === "user" ? "bg-primary/5 border-primary/15" :
-                    s.type === "ppap" ? "bg-primary/5 border-primary/15" :
-                    s.type === "result" ? "bg-hoot-green/5 border-hoot-green/15" :
-                    "bg-card border-border";
+            {/* Data captured */}
+            <div className="bg-card rounded-lg p-3 border border-border flex-1">
+              <div className="text-[10px] font-bold text-muted-foreground tracking-wider mb-2">DATA CAPTURED</div>
+              <div className="space-y-1">
+                {LAYERS.map((l, i) => {
+                  const captured = step >= 6;
                   return (
-                    <div key={s.id} className={`px-2 py-1.5 rounded-md border ${bgClass} animate-fade-up`}>
-                      {s.agent && (
-                        <div className="text-[8px] font-bold text-muted-foreground mb-0.5">
-                          {s.icon && `${s.icon} `}{s.agent}
-                        </div>
-                      )}
-                      {s.type === "user" && <div className="text-[8px] font-bold text-primary mb-0.5">YOU</div>}
-                      {s.type === "ppap" && <div className="text-[8px] font-bold text-primary mb-0.5">💎 PPAP AUTO-CAPTURE</div>}
-                      {s.type === "result" && <div className="text-[8px] font-bold text-hoot-green mb-0.5">✓ COMPLETE</div>}
-                      <div className="text-[10px] text-muted-foreground leading-snug">{s.text}</div>
+                    <div
+                      key={i}
+                      className={`flex items-center gap-2 transition-opacity duration-300 ${
+                        captured ? "opacity-100" : "opacity-30"
+                      }`}
+                    >
+                      <span
+                        className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded ${
+                          !l.canSynth
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-border text-muted-foreground"
+                        }`}
+                      >
+                        {l.label}
+                      </span>
+                      <span className="text-[10px] text-foreground">{l.name}</span>
                     </div>
                   );
                 })}
-                {step >= 0 && step < 6 && (
-                  <div className="text-[10px] text-muted-foreground/40 p-1">
-                    <span className="animate-blink">●</span> Processing...
-                  </div>
-                )}
               </div>
-            </div>
-
-            {/* Input */}
-            <div className="bg-card rounded-lg px-2.5 py-2 border border-border flex items-center gap-1.5">
-              <span className="text-[11px] text-muted-foreground/60 flex-1">Ask AI anything...</span>
-              <button
-                onClick={!playing ? play : undefined}
-                disabled={playing}
-                className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${
-                  playing ? "bg-muted-foreground/30 cursor-default" : "bg-primary cursor-pointer hover:bg-primary/90"
-                }`}
-              >
-                <span className="text-xs text-primary-foreground font-bold">{playing ? "…" : "▶"}</span>
-              </button>
+              {step >= 6 && (
+                <p className="text-[9px] text-muted-foreground mt-2 leading-snug">
+                  L3 + L4 cannot be synthesized — real human work only.
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* PPAP Layers — after demo */}
+      {/* Verification pipeline — below browser */}
+      {verifyStage >= 1 && (
+        <div className="mt-8 animate-fade-up">
+          <h3 className="text-2xl font-display text-foreground mb-4">
+            Verification <span className="italic text-primary">pipeline</span>
+          </h3>
+          <div className="flex gap-1.5 items-center flex-wrap">
+            {VERIFY_PIPELINE.map((p, i) => (
+              <div key={i} className="flex items-center gap-1.5">
+                <div
+                  className={`px-3.5 py-2 rounded-lg text-center border transition-all duration-300 ${
+                    verifyStage >= p.stage
+                      ? "bg-primary/5 border-primary/15"
+                      : "bg-card border-border"
+                  }`}
+                >
+                  <div className={`text-xs font-bold ${verifyStage >= p.stage ? "text-primary" : "text-muted-foreground/40"}`}>
+                    {p.label}
+                  </div>
+                  {p.sub && (
+                    <div className={`text-[10px] ${verifyStage >= p.stage ? "text-muted-foreground" : "text-muted-foreground/40"}`}>
+                      {p.sub}
+                    </div>
+                  )}
+                </div>
+                {i < VERIFY_PIPELINE.length - 1 && (
+                  <span className="text-muted-foreground/30 text-base font-light">→</span>
+                )}
+              </div>
+            ))}
+          </div>
+          <p className="mt-2.5 text-xs text-muted-foreground">
+            Forgery probability: 2⁻¹²⁸. Verified by 5 independent Notary nodes.
+          </p>
+        </div>
+      )}
+
+      {/* PPAP Layers breakdown — after complete */}
       {done && (
-        <div className="mt-12 animate-fade-up">
+        <div className="mt-10 animate-fade-up">
           <div className="flex items-center gap-4 mb-5">
-            <h3 className="text-3xl font-display text-foreground">
+            <h3 className="text-2xl font-display text-foreground">
               What was <span className="italic text-primary">captured</span>
             </h3>
             <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">PPAP #18,429 · CQS 8.4</span>
+            <span className="text-xs text-muted-foreground">PPAP · CQS GOLD</span>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -311,7 +396,6 @@ export function BrowserDemo() {
                 className={`bg-card border rounded-xl p-4 ${
                   layer.canSynth ? "border-border" : "border-primary/20"
                 }`}
-                style={{ animationDelay: `${i * 80}ms` }}
               >
                 <div className="flex items-center gap-2 mb-2.5">
                   <div
@@ -340,59 +424,22 @@ export function BrowserDemo() {
           </div>
 
           <div className="mt-4 p-4 bg-primary/5 border border-primary/10 rounded-xl text-sm text-muted-foreground leading-relaxed">
-            <span className="text-primary font-bold">L3 Orchestration</span> (Gmail → Claude → Notion tool-call
-            sequence) and <span className="text-primary font-bold">L4 Feedback</span> (user corrections) are
-            structurally impossible to synthesize — they require a real human working with real AI tools in a real
-            workflow. This is the training data that reasoning models need.
+            Sarah's correction (<span className="text-primary font-bold">L4</span>: "#2 is good but make it shorter") and
+            the orchestration sequence (<span className="text-primary font-bold">L3</span>: Claude → Gmail) are
+            structurally impossible to synthesize — they require a real human working with real AI tools.
+            This is the training data that reasoning models need.
           </div>
-        </div>
-      )}
-
-      {/* Verification pipeline */}
-      {ppapStage >= 2 && (
-        <div className="mt-10 animate-fade-up">
-          <h3 className="text-3xl font-display text-foreground mb-4">
-            Verification <span className="italic text-primary">pipeline</span>
-          </h3>
-          <div className="flex gap-1.5 items-center flex-wrap">
-            {PIPELINE_STEPS.map((p, i) => (
-              <div key={i} className="flex items-center gap-1.5">
-                <div
-                  className={`px-3.5 py-2 rounded-lg text-center border ${
-                    ppapStage >= p.stage
-                      ? "bg-primary/5 border-primary/15"
-                      : "bg-card border-border"
-                  }`}
-                >
-                  <div className={`text-xs font-bold ${ppapStage >= p.stage ? "text-primary" : "text-muted-foreground/40"}`}>
-                    {p.label}
-                  </div>
-                  {p.sub && (
-                    <div className={`text-[10px] ${ppapStage >= p.stage ? "text-muted-foreground" : "text-muted-foreground/40"}`}>
-                      {p.sub}
-                    </div>
-                  )}
-                </div>
-                {i < PIPELINE_STEPS.length - 1 && (
-                  <span className="text-muted-foreground/30 text-base font-light">→</span>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="mt-2.5 text-xs text-muted-foreground">
-            Forgery probability: 2⁻¹²⁸. Verified by 5 independent Notary nodes selected via Chainlink VRF.
-          </p>
         </div>
       )}
 
       {/* Replay */}
-      {!playing && step >= 7 && (
-        <div className="mt-10 text-center">
+      {!playing && step >= 6 && (
+        <div className="mt-8 text-center">
           <button
             onClick={play}
             className="px-5 py-2 text-sm font-semibold text-primary rounded-lg border border-border hover:bg-primary/5 transition-colors"
           >
-            ▶ Replay Demo
+            ▶ Replay Sarah's Session
           </button>
         </div>
       )}
