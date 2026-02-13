@@ -12,34 +12,34 @@ export function Navbar() {
   }, []);
 
   const links = [
-    { to: "/", label: "Browser" },
-    { to: "/protocol", label: "Protocol" },
-    { to: "/agents", label: "Agents" },
-    { to: "/docs", label: "Docs" },
+    { to: "/", label: "BROWSER" },
+    { to: "/protocol", label: "PROTOCOL" },
+    { to: "/agents", label: "AGENTS" },
+    { to: "/docs", label: "DOCS" },
   ];
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-card/90 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+        scrolled ? "bg-background/95 backdrop-blur-sm border-foreground/10" : "bg-background border-foreground/10"
       }`}
     >
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">H</span>
-          </div>
-          <span className="font-bold text-foreground tracking-tight text-lg">HOOTS</span>
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10 h-14 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="font-bold text-foreground tracking-tight text-lg">HOOT</span>
+          <span className="font-mono text-[10px] text-muted-foreground border border-border px-1.5 py-0.5">
+            V1.0
+          </span>
         </Link>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0">
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              className={`px-4 py-2 text-xs font-medium tracking-wider transition-colors ${
                 location.pathname === link.to
-                  ? "text-primary bg-primary/5"
+                  ? "text-foreground underline underline-offset-4"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -47,10 +47,10 @@ export function Navbar() {
             </Link>
           ))}
           <a
-            href="#"
-            className="ml-3 px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+            href="#waitlist"
+            className="ml-4 px-5 py-2 bg-foreground text-background text-xs font-bold tracking-wider hover:bg-foreground/90 transition-colors"
           >
-            Join Waitlist
+            JOIN_WAITLIST
           </a>
         </div>
       </div>
