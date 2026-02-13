@@ -4,10 +4,10 @@ import { useInView } from "@/hooks/useInView";
 const STEPS = [
   { id: 0, type: "user", text: "Summarize my emails, find action items, and add them to my Notion task board" },
   { id: 1, type: "system", text: "Routing to 3 skills...", agent: "OpenClaw" },
-  { id: 2, type: "skill", text: "Scanning 47 emails from last 24h...", agent: "Gmail", icon: "✉", color: "hoot-red" },
-  { id: 3, type: "skill", text: "Found 12 action items across 8 threads", agent: "Gmail", icon: "✉", color: "hoot-red" },
-  { id: 4, type: "skill", text: "Summarizing with Claude...", agent: "Claude", icon: "◆", color: "hoot-purple" },
-  { id: 5, type: "skill", text: "Creating 12 tasks in 'Action Items' board", agent: "Notion", icon: "□", color: "hoot-black" },
+  { id: 2, type: "skill", text: "Scanning 47 emails from last 24h...", agent: "Gmail", icon: "✉" },
+  { id: 3, type: "skill", text: "Found 12 action items across 8 threads", agent: "Gmail", icon: "✉" },
+  { id: 4, type: "skill", text: "Summarizing with Claude...", agent: "Claude", icon: "◆" },
+  { id: 5, type: "skill", text: "Creating 12 tasks in 'Action Items' board", agent: "Notion", icon: "□" },
   { id: 6, type: "result", text: "Done. 12 tasks added. 3 flagged as urgent." },
   { id: 7, type: "ppap", text: "PPAP captured · L1 Prompt + L3 Orchestration (Gmail → Claude → Notion) + L4 Feedback" },
 ];
@@ -57,7 +57,7 @@ export function BrowserDemo() {
   const [hasPlayed, setHasPlayed] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const { ref: sectionRef, inView } = useInView({ threshold: 0.3 });
+  const { ref: sectionRef, inView } = useInView({ threshold: 0.25 });
 
   const reset = useCallback(() => {
     timers.current.forEach(clearTimeout);
@@ -85,7 +85,6 @@ export function BrowserDemo() {
     });
   }, [reset]);
 
-  // Auto-play on scroll into view
   useEffect(() => {
     if (inView && !hasPlayed) {
       const t = setTimeout(play, 400);
@@ -113,23 +112,23 @@ export function BrowserDemo() {
         {/* Title bar */}
         <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-border">
           <div className="flex gap-1.5">
-            {["bg-destructive", "bg-hoot-orange", "bg-hoot-green"].map((c, i) => (
-              <div key={i} className={`w-3 h-3 rounded-full ${c}`} />
-            ))}
+            <div className="w-3 h-3 rounded-full bg-destructive" />
+            <div className="w-3 h-3 rounded-full bg-hoot-orange" />
+            <div className="w-3 h-3 rounded-full bg-hoot-green" />
           </div>
-          <div className="text-sm font-bold text-foreground tracking-tight">HOOT BROWSER</div>
-          <div className="flex-1 ml-2 bg-background rounded-lg px-3.5 py-1.5 border border-border text-xs text-muted-foreground">
+          <div className="text-sm font-bold text-foreground tracking-tight">HOOTS BROWSER</div>
+          <div className="flex-1 ml-2 bg-background rounded-lg px-3.5 py-1.5 border border-border text-xs text-muted-foreground truncate">
             mail.google.com — 47 unread
           </div>
-          <div className="text-xs text-muted-foreground font-mono">
+          <div className="text-xs text-muted-foreground font-mono hidden sm:block">
             <span className="text-hoot-green">●</span> 0xd368…ff59
           </div>
         </div>
 
         {/* Browser body */}
-        <div className="flex min-h-[400px]">
+        <div className="flex min-h-[420px]">
           {/* Sidebar */}
-          <div className="w-14 bg-secondary border-r border-border py-4 flex flex-col items-center gap-5 hidden md:flex">
+          <div className="w-14 bg-secondary border-r border-border py-4 flex-col items-center gap-5 hidden md:flex">
             {[
               { icon: "🌐", label: "Browse", on: true },
               { icon: "🏠", label: "Hub", on: false },
@@ -210,7 +209,7 @@ export function BrowserDemo() {
           </div>
 
           {/* Right — Agent panel */}
-          <div className="w-[220px] lg:w-[250px] bg-secondary p-3 flex flex-col gap-2 hidden md:flex">
+          <div className="w-[220px] lg:w-[260px] bg-secondary p-3 flex flex-col gap-2 hidden md:flex">
             <div className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
               Agent Panel
             </div>
@@ -248,7 +247,7 @@ export function BrowserDemo() {
               <div className="text-[9px] font-bold tracking-wider text-muted-foreground mb-1 uppercase">
                 Orchestration Log
               </div>
-              <div ref={chatRef} className="flex-1 overflow-auto flex flex-col gap-1 max-h-[180px] scrollbar-none">
+              <div ref={chatRef} className="flex-1 overflow-auto flex flex-col gap-1 max-h-[200px] scrollbar-none">
                 {visible.map((s) => {
                   const bgClass =
                     s.type === "user" ? "bg-primary/5 border-primary/15" :
@@ -324,7 +323,7 @@ export function BrowserDemo() {
                   >
                     {layer.label}
                   </div>
-                  <div className="text-base text-foreground">{layer.name}</div>
+                  <div className="text-base text-foreground font-semibold">{layer.name}</div>
                 </div>
                 <div className="text-sm text-muted-foreground mb-2.5 leading-relaxed">{layer.desc}</div>
                 <div
@@ -344,7 +343,7 @@ export function BrowserDemo() {
             <span className="text-primary font-bold">L3 Orchestration</span> (Gmail → Claude → Notion tool-call
             sequence) and <span className="text-primary font-bold">L4 Feedback</span> (user corrections) are
             structurally impossible to synthesize — they require a real human working with real AI tools in a real
-            workflow.
+            workflow. This is the training data that reasoning models need.
           </div>
         </div>
       )}
@@ -391,7 +390,7 @@ export function BrowserDemo() {
         <div className="mt-10 text-center">
           <button
             onClick={play}
-            className="border border-primary rounded-xl px-8 py-3 text-primary text-sm font-semibold hover:bg-primary/5 transition-colors"
+            className="px-5 py-2 text-sm font-semibold text-primary rounded-lg border border-border hover:bg-primary/5 transition-colors"
           >
             ▶ Replay Demo
           </button>
