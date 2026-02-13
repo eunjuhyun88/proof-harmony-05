@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ScrollReveal } from "@/components/hoot/ScrollReveal";
+import { BrowserDemo } from "@/components/hoot/BrowserDemo";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
 import { Link } from "react-router-dom";
@@ -264,6 +265,22 @@ export default function Index() {
               </div>
             </motion.div>
           </AnimatePresence>
+        </div>
+      </section>
+
+      {/* ── LIVE DEMO ── */}
+      <section className="py-20 px-6 md:px-12 border-t border-border">
+        <div className="max-w-[1100px] mx-auto">
+          <ScrollReveal>
+            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Live Demo</div>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-2 max-w-2xl">
+              One command, <span className="italic text-primary">multiple agents</span>, verified data.
+            </h2>
+            <p className="text-muted-foreground max-w-lg mb-10">
+              Watch a real orchestration: a user asks one question — the Browser routes to three skills — and a PPAP captures the entire journey.
+            </p>
+          </ScrollReveal>
+          <BrowserDemo />
         </div>
       </section>
 
