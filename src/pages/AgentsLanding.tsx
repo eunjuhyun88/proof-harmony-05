@@ -1,51 +1,19 @@
 import { ScrollReveal } from "@/components/hoot/ScrollReveal";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
-
-const WITHOUT = [
-  "One of 10,000 agents — no differentiation",
-  "No trust score",
-  "Random selection or price competition only in x402",
-  "Builder identity unknown",
-];
-
-const WITH = [
-  "4-axis verification: Code / Security / Performance / On-chain",
-  "Trust Bonus inherited from HumanPassport",
-  "Priority selection in Trust-Gated payments",
-  "Owner HTS publicly visible → delegator trust",
-];
-
-const PROCESS_STEPS = [
-  {
-    num: "01",
-    title: "Register on ERC-8004",
-    desc: "Register your agent on ERC-8004, or connect an existing registered agent.",
-  },
-  {
-    num: "02",
-    title: "4-Axis Technical Verification",
-    desc: "MOLTVC verifies Code quality, Security audit, Performance benchmarks, and On-chain activity.",
-  },
-  {
-    num: "03",
-    title: "Credential Issued",
-    desc: "Agent Credential NFT minted. Trust Score published. Ready for Trust-Gated x402 payments.",
-  },
-];
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const TRACKS = [
   {
     track: "Track A: External",
-    target: "Existing ERC-8004 agents",
-    requirement: "4-axis technical verification only",
-    result: "Agent Credential issued",
+    desc: "Any ERC-8004 agent. Technical verification.",
+    cost: "50–300 HOOTS",
   },
   {
     track: "Track B: Native",
-    target: "Agents using Hoots Browser",
-    requirement: "4-axis technical + PPAP generation",
-    result: "Credential + CQS premium",
+    desc: "Built in Hoot Browser. Full trust inheritance.",
+    cost: "Included",
   },
 ];
 
@@ -59,124 +27,144 @@ export default function AgentsLanding() {
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
             <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-4">
-              Hoots for Agents
+              Hoot for Agents
             </div>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.95] mb-6 max-w-4xl">
-              Verified agents<br />
-              <span className="italic text-primary">get chosen first.</span>
+              Trust for the<br />
+              <span className="italic text-primary">agent economy.</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
-              Give your ERC-8004 agent a Trust Credential.
-              Only verified agents get priority execution in Trust-Gated x402 payments.
+              Autonomous agents need more than code. They need accountable humans behind them.
+              Hoot connects agent capability to human reputation.
             </p>
             <div className="flex gap-3 flex-wrap">
               <a
                 href="#"
                 className="px-7 py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors"
               >
-                Apply for Credential
+                Register Agent
               </a>
               <a
                 href="#"
                 className="px-7 py-3 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors"
               >
-                Agent SDK Docs
+                Get Credential
               </a>
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* ── WHY VERIFICATION ── */}
+      {/* ── THE GAP ── */}
       <section className="py-20 px-6 md:px-12 border-t border-border">
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Why Verification</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-8">
-              Before vs <span className="italic text-primary">After</span>
+            <div className="text-xs font-bold tracking-[0.2em] uppercase text-destructive mb-3">The Gap</div>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-6 max-w-2xl">
+              1.2 million <span className="italic text-destructive">unverified agents</span><br />
+              in one week.
             </h2>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <ScrollReveal direction="left">
-              <div className="bg-card border border-border rounded-xl p-6 h-full">
-                <h3 className="font-display text-xl text-foreground mb-4 flex items-center gap-2">
-                  <span className="text-destructive">✕</span> Without Credential
-                </h3>
-                <ul className="space-y-3">
-                  {WITHOUT.map((item, i) => (
-                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <span className="text-destructive/50 mt-0.5">—</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal direction="right">
-              <div className="bg-card border-2 border-primary/20 rounded-xl p-6 h-full">
-                <h3 className="font-display text-xl text-foreground mb-4 flex items-center gap-2">
-                  <span className="text-primary">✓</span> With Credential
-                </h3>
-                <ul className="space-y-3">
-                  {WITH.map((item, i) => (
-                    <li key={i} className="text-sm text-foreground flex items-start gap-2">
-                      <span className="text-primary mt-0.5">·</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </ScrollReveal>
-          </div>
+          <ScrollReveal delay={0.1}>
+            <div className="max-w-3xl space-y-4">
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                The agent economy is growing faster than its trust infrastructure.
+                Current solutions verify one thing at a time — identity, or security, or feedback.
+                Not the full picture.
+              </p>
+              <p className="text-lg text-foreground font-medium leading-relaxed">
+                Hoot verifies the full stack: the code, the security, the performance,
+                the on-chain history — and the human who built it.
+              </p>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* ── CREDENTIAL PROCESS ── */}
+      {/* ── SCENARIO: BUILD TRUST ONCE ── */}
       <section className="py-20 px-6 md:px-12 border-t border-border">
         <div className="max-w-[1200px] mx-auto">
           <ScrollReveal>
-            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Process</div>
-            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-12">
-              Three steps to <span className="italic text-primary">verification</span>.
+            <div className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">Scenario</div>
+            <h2 className="font-display text-4xl md:text-5xl text-foreground mb-10 max-w-2xl">
+              Build trust once.<br />
+              <span className="italic text-primary">Deploy everywhere.</span>
             </h2>
           </ScrollReveal>
 
-          <div className="flex flex-col md:flex-row gap-4 mb-12">
-            {PROCESS_STEPS.map((s, i) => (
-              <ScrollReveal key={i} delay={i * 0.12} className="flex-1">
-                <div className="bg-card border border-border rounded-xl p-6 h-full relative">
-                  <span className="text-xs font-bold text-primary bg-primary/5 px-2.5 py-1 rounded">{s.num}</span>
-                  <h3 className="font-display text-xl text-foreground mt-3 mb-2">{s.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <ScrollReveal>
+              <div className="bg-card border border-border rounded-2xl overflow-hidden">
+                <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-border">
+                  <div className="flex gap-1.5">
+                    {["bg-destructive", "bg-hoot-orange", "bg-hoot-green"].map((c, i) => (
+                      <div key={i} className={`w-2.5 h-2.5 rounded-full ${c}`} />
+                    ))}
+                  </div>
+                  <div className="text-xs font-bold text-foreground tracking-tight">AGENT CREDENTIAL</div>
                 </div>
-              </ScrollReveal>
-            ))}
-          </div>
+                <div className="p-5 space-y-4">
+                  <div className="text-[10px] font-bold text-muted-foreground tracking-wider">YOUR REPUTATION → YOUR AGENT'S TRUST</div>
 
-          {/* Cost + Tracks */}
-          <ScrollReveal>
-            <div className="bg-card border border-border rounded-xl overflow-hidden mb-4">
-              <div className="grid grid-cols-4 text-xs font-bold text-muted-foreground bg-secondary p-3 border-b border-border">
-                <div>Track</div>
-                <div>Target</div>
-                <div>Requirement</div>
-                <div>Result</div>
-              </div>
-              {TRACKS.map((t, i) => (
-                <div key={i} className="grid grid-cols-4 text-sm p-3 border-b border-border last:border-0">
-                  <div className="font-semibold text-foreground">{t.track}</div>
-                  <div className="text-muted-foreground">{t.target}</div>
-                  <div className="text-muted-foreground">{t.requirement}</div>
-                  <div className="font-semibold text-foreground">{t.result}</div>
+                  <div className="border border-border rounded-lg p-3">
+                    <div className="text-xs text-muted-foreground mb-1">You: 14 months of verified AI work</div>
+                    <div className="text-sm font-semibold text-foreground">Trust tier: <span className="text-primary">GOLD</span></div>
+                  </div>
+
+                  <div className="border border-border rounded-lg p-3">
+                    <div className="text-xs text-muted-foreground mb-2">Your agent:</div>
+                    <div className="space-y-1.5 text-sm text-foreground">
+                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Code verified</div>
+                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Security scanned</div>
+                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Performance tested</div>
+                      <div className="flex items-center gap-2"><span className="text-primary">✓</span> Trust inherited from you</div>
+                    </div>
+                  </div>
+
+                  <motion.div
+                    className="border-t border-border pt-3 text-sm text-muted-foreground space-y-1.5"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    viewport={{ once: true }}
+                  >
+                    <p className="text-foreground font-medium">
+                      Autonomy with accountability.
+                    </p>
+                    <p>Agent succeeds → your trust grows.</p>
+                    <p>Agent fails → your trust is at stake.</p>
+                  </motion.div>
                 </div>
-              ))}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Cost: 50–300 HOOTS depending on verification complexity. Owner HTS {"<"} 50 = Credential denied (Sybil prevention).
-            </p>
-          </ScrollReveal>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2}>
+              <div className="flex flex-col justify-center space-y-6">
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Other agents and services can verify that your agent is backed
+                  by a real, accountable human with a real track record.
+                </p>
+                <p className="text-lg text-foreground font-medium leading-relaxed">
+                  Your reputation follows your agent. Build trust once, deploy everywhere.
+                </p>
+
+                {/* Two Tracks */}
+                <div className="space-y-3 mt-4">
+                  <div className="text-xs font-bold tracking-[0.15em] uppercase text-muted-foreground">Two Tracks</div>
+                  {TRACKS.map((t, i) => (
+                    <div key={i} className="bg-secondary rounded-lg p-4 flex justify-between items-start">
+                      <div>
+                        <div className="text-sm font-semibold text-foreground">{t.track}</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">{t.desc}</div>
+                      </div>
+                      <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded shrink-0">{t.cost}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -184,19 +172,16 @@ export default function AgentsLanding() {
       <section className="py-24 px-6 md:px-12 border-t border-border">
         <div className="max-w-[1200px] mx-auto text-center">
           <ScrollReveal>
-            <p className="font-display text-2xl text-muted-foreground mb-6 italic">
+            <p className="font-display text-2xl text-muted-foreground mb-8 italic max-w-lg mx-auto">
               "30K+ agents on ERC-8004. 0 verified. Be first."
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
               <a href="#" className="px-8 py-3.5 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:bg-primary/90 transition-colors">
-                Apply for Credential
+                Register Agent
               </a>
-              <a href="#" className="px-8 py-3.5 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors">
-                Agent SDK Docs
-              </a>
-              <a href="#" className="px-8 py-3.5 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors">
-                x402 Integration Guide
-              </a>
+              <Link to="/" className="px-8 py-3.5 border border-border text-foreground rounded-xl font-semibold text-sm hover:bg-secondary transition-colors">
+                Download Browser
+              </Link>
             </div>
           </ScrollReveal>
         </div>
