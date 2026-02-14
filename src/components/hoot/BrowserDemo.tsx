@@ -105,10 +105,8 @@ export function BrowserDemo() {
         </div>
       </div>
 
-      {/* Scrollable body */}
-      <div className="flex-1 overflow-y-auto min-h-0">
-        {/* Browser body */}
-        <div className="flex min-h-[400px]">
+      {/* Browser body — fixed layout, only chat scrolls */}
+      <div className="flex-1 flex min-h-0">
           <div className="w-14 bg-secondary border-r border-foreground/10 py-4 flex-col items-center gap-5 hidden md:flex">
             {[
               { icon: "🌐", label: "BROWSE", on: true },
@@ -321,9 +319,7 @@ export function BrowserDemo() {
               )}
             </div>
           </div>
-        </div>
-
-      </div>{/* end scrollable body */}
+      </div>{/* end browser body */}
     </div>
 
     {/* Verification pipeline — outside browser */}
