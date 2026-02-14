@@ -92,6 +92,7 @@ export function BrowserDemo() {
   const done = verifyStage >= 4;
 
   return (
+    <>
     <div ref={sectionRef} className="h-[80vh] max-h-[700px] flex flex-col bg-background border border-foreground/10 overflow-hidden">
       {/* Title bar */}
       <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-foreground/10 shrink-0">
@@ -322,99 +323,99 @@ export function BrowserDemo() {
           </div>
         </div>
 
-        <div className="px-4 pb-4">
-        {/* Verification pipeline */}
-        {verifyStage >= 1 && (
-        <div className="mt-8 animate-fade-up">
-          <h3 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-tight">
-            VERIFICATION PIPELINE
-          </h3>
-          <div className="flex gap-0 items-stretch flex-wrap border border-foreground/10">
-            {VERIFY_PIPELINE.map((p, i) => (
-              <div key={i} className={`flex-1 min-w-[100px] p-3 text-center transition-all duration-300 ${
-                i < VERIFY_PIPELINE.length - 1 ? "border-r border-foreground/10" : ""
-              } ${verifyStage >= p.stage ? "bg-secondary" : ""}`}>
-                <div className={`font-mono text-[10px] font-bold ${verifyStage >= p.stage ? "text-foreground" : "text-muted-foreground/30"}`}>
-                  {p.label}
-                </div>
-                {p.sub && (
-                  <div className={`font-mono text-[9px] mt-0.5 ${verifyStage >= p.stage ? "text-muted-foreground" : "text-muted-foreground/20"}`}>
-                    {p.sub}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="mt-2.5 font-mono text-[10px] text-muted-foreground">
-            FORGERY_PROBABILITY: 2⁻¹²⁸. VERIFIED BY 5 INDEPENDENT NOTARY NODES.
-          </p>
-        </div>
-      )}
-
-      {/* PPAP Layers */}
-      {done && (
-        <div className="mt-10 animate-fade-up">
-          <div className="flex items-center gap-4 mb-5">
-            <h3 className="text-2xl font-bold text-foreground uppercase tracking-tight">
-              WHAT WAS CAPTURED
-            </h3>
-            <div className="flex-1 h-px bg-foreground/10" />
-            <span className="font-mono text-[10px] text-muted-foreground">PPAP · CQS_GOLD</span>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 border border-foreground/10">
-            {LAYERS.map((layer, i) => (
-              <div
-                key={i}
-                className={`p-4 ${i < 3 ? "border-r border-foreground/10" : ""} ${!layer.canSynth ? "bg-secondary" : ""}`}
-              >
-                <div className="flex items-center gap-2 mb-2.5">
-                  <div
-                    className={`font-mono text-[10px] font-extrabold px-1.5 py-0.5 ${
-                      layer.canSynth
-                        ? "bg-secondary text-muted-foreground border border-foreground/10"
-                        : "bg-foreground text-background"
-                    }`}
-                  >
-                    {layer.label}
-                  </div>
-                  <div className="text-sm text-foreground font-bold">{layer.name}</div>
-                </div>
-                <div className="text-xs text-muted-foreground mb-2.5 leading-relaxed">{layer.desc}</div>
-                <div
-                  className={`font-mono text-[9px] font-bold inline-block px-2 py-0.5 border ${
-                    layer.canSynth
-                      ? "text-hoot-orange border-hoot-orange/30"
-                      : "text-hoot-green border-hoot-green/30"
-                  }`}
-                >
-                  {layer.canSynth ? "CAN_SYNTHESIZE" : "CANNOT_SYNTHESIZE"}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 p-4 border border-foreground/10 bg-secondary text-sm text-muted-foreground leading-relaxed">
-            Sarah's correction (<span className="font-bold text-foreground">L4</span>: "#2 is good but make it shorter") and
-            the orchestration sequence (<span className="font-bold text-foreground">L3</span>: Claude → Gmail) are
-            structurally impossible to synthesize — they require a real human working with real AI tools.
-          </div>
-        </div>
-      )}
-
-        {/* Replay */}
-        {!playing && step >= 6 && (
-          <div className="mt-8 text-center pb-4">
-            <button
-              onClick={play}
-              className="px-5 py-2 font-mono text-xs font-bold text-foreground border border-foreground hover:bg-foreground hover:text-background transition-colors tracking-wider"
-            >
-              ▶ REPLAY_SESSION
-            </button>
-          </div>
-        )}
-        </div>{/* end px-4 wrapper */}
       </div>{/* end scrollable body */}
     </div>
+
+    {/* Verification pipeline — outside browser */}
+    {verifyStage >= 1 && (
+      <div className="mt-8 animate-fade-up">
+        <h3 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-tight">
+          VERIFICATION PIPELINE
+        </h3>
+        <div className="flex gap-0 items-stretch flex-wrap border border-foreground/10">
+          {VERIFY_PIPELINE.map((p, i) => (
+            <div key={i} className={`flex-1 min-w-[100px] p-3 text-center transition-all duration-300 ${
+              i < VERIFY_PIPELINE.length - 1 ? "border-r border-foreground/10" : ""
+            } ${verifyStage >= p.stage ? "bg-secondary" : ""}`}>
+              <div className={`font-mono text-[10px] font-bold ${verifyStage >= p.stage ? "text-foreground" : "text-muted-foreground/30"}`}>
+                {p.label}
+              </div>
+              {p.sub && (
+                <div className={`font-mono text-[9px] mt-0.5 ${verifyStage >= p.stage ? "text-muted-foreground" : "text-muted-foreground/20"}`}>
+                  {p.sub}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <p className="mt-2.5 font-mono text-[10px] text-muted-foreground">
+          FORGERY_PROBABILITY: 2⁻¹²⁸. VERIFIED BY 5 INDEPENDENT NOTARY NODES.
+        </p>
+      </div>
+    )}
+
+    {/* PPAP Layers — outside browser */}
+    {done && (
+      <div className="mt-10 animate-fade-up">
+        <div className="flex items-center gap-4 mb-5">
+          <h3 className="text-2xl font-bold text-foreground uppercase tracking-tight">
+            WHAT WAS CAPTURED
+          </h3>
+          <div className="flex-1 h-px bg-foreground/10" />
+          <span className="font-mono text-[10px] text-muted-foreground">PPAP · CQS_GOLD</span>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 border border-foreground/10">
+          {LAYERS.map((layer, i) => (
+            <div
+              key={i}
+              className={`p-4 ${i < 3 ? "border-r border-foreground/10" : ""} ${!layer.canSynth ? "bg-secondary" : ""}`}
+            >
+              <div className="flex items-center gap-2 mb-2.5">
+                <div
+                  className={`font-mono text-[10px] font-extrabold px-1.5 py-0.5 ${
+                    layer.canSynth
+                      ? "bg-secondary text-muted-foreground border border-foreground/10"
+                      : "bg-foreground text-background"
+                  }`}
+                >
+                  {layer.label}
+                </div>
+                <div className="text-sm text-foreground font-bold">{layer.name}</div>
+              </div>
+              <div className="text-xs text-muted-foreground mb-2.5 leading-relaxed">{layer.desc}</div>
+              <div
+                className={`font-mono text-[9px] font-bold inline-block px-2 py-0.5 border ${
+                  layer.canSynth
+                    ? "text-hoot-orange border-hoot-orange/30"
+                    : "text-hoot-green border-hoot-green/30"
+                }`}
+              >
+                {layer.canSynth ? "CAN_SYNTHESIZE" : "CANNOT_SYNTHESIZE"}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 p-4 border border-foreground/10 bg-secondary text-sm text-muted-foreground leading-relaxed">
+          Sarah's correction (<span className="font-bold text-foreground">L4</span>: "#2 is good but make it shorter") and
+          the orchestration sequence (<span className="font-bold text-foreground">L3</span>: Claude → Gmail) are
+          structurally impossible to synthesize — they require a real human working with real AI tools.
+        </div>
+      </div>
+    )}
+
+    {/* Replay */}
+    {!playing && step >= 6 && (
+      <div className="mt-8 text-center">
+        <button
+          onClick={play}
+          className="px-5 py-2 font-mono text-xs font-bold text-foreground border border-foreground hover:bg-foreground hover:text-background transition-colors tracking-wider"
+        >
+          ▶ REPLAY_SESSION
+        </button>
+      </div>
+    )}
+  </>
   );
 }
