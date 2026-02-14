@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,58 +6,59 @@
 
 @layer base {
   :root {
-    /* v10 dark theme — near black */
-    --background: 225 20% 2%;
-    --foreground: 222 20% 92%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
 
-    --card: 225 18% 7%;
-    --card-foreground: 222 20% 92%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
 
-    --popover: 225 18% 7%;
-    --popover-foreground: 222 20% 92%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
 
-    --primary: 155 100% 45%;
-    --primary-foreground: 225 20% 2%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 225 18% 7%;
-    --secondary-foreground: 222 20% 92%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 4%;
 
-    --muted: 225 15% 12%;
-    --muted-foreground: 222 12% 55%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 155 100% 45%;
-    --accent-foreground: 225 20% 2%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 4%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 5 76% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 225 15% 13%;
-    --input: 225 15% 13%;
-    --ring: 155 100% 45%;
+    --border: 0 0% 82%;
+    --input: 0 0% 82%;
+    --ring: 0 0% 4%;
 
     --radius: 0px;
 
-    /* Hoot v10 tokens */
-    --hoot-green: 155 100% 45%;
-    --hoot-blue: 219 100% 65%;
-    --hoot-cyan: 190 100% 50%;
-    --hoot-amber: 36 100% 56%;
-    --hoot-red: 0 100% 65%;
-    --hoot-surface: 225 18% 7%;
-    --hoot-terminal: 225 22% 4%;
-    --hoot-text-primary: 222 20% 92%;
-    --hoot-text-secondary: 222 12% 55%;
-    --hoot-text-tertiary: 222 10% 33%;
-    --hoot-border: 225 15% 13%;
+    /* Hoot tokens */
+    --hoot-black: 0 0% 4%;
+    --hoot-green: 155 100% 33%;
+    --hoot-red: 5 76% 50%;
+    --hoot-orange: 28 79% 52%;
+    --hoot-purple: 248 73% 65%;
+    --hoot-blue: 223 100% 50%;
+    --hoot-warm-gray: 0 0% 96%;
+    --hoot-surface: 0 0% 100%;
+    --hoot-surface-alt: 0 0% 97%;
+    --hoot-text: 0 0% 4%;
+    --hoot-text-mid: 0 0% 33%;
+    --hoot-text-dim: 0 0% 53%;
+    --hoot-text-faint: 0 0% 67%;
 
-    --sidebar-background: 225 18% 5%;
-    --sidebar-foreground: 222 20% 92%;
-    --sidebar-primary: 155 100% 45%;
-    --sidebar-primary-foreground: 225 20% 2%;
-    --sidebar-accent: 225 15% 12%;
-    --sidebar-accent-foreground: 222 20% 92%;
-    --sidebar-border: 225 15% 13%;
-    --sidebar-ring: 155 100% 45%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -67,21 +68,21 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
   }
   .font-body {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
   .font-mono-label {
     font-family: 'Space Mono', monospace;
@@ -98,9 +99,19 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.3); }
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .animate-blink {
@@ -111,6 +122,39 @@
   animation: fadeUp 0.5s ease both;
 }
 
-.animate-pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
+.animate-slide-left {
+  animation: slideInLeft 0.5s ease both;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.5s ease both;
+}
+
+/* Dot grid background */
+.dot-grid {
+  background-image: radial-gradient(circle, hsl(var(--foreground) / 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dot-grid-sparse {
+  background-image: radial-gradient(circle, hsl(var(--foreground) / 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Strikethrough animation */
+@keyframes strikethrough {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.strike-reveal {
+  position: relative;
+}
+.strike-reveal::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  width: 0;
+  background: hsl(var(--foreground) / 0.5);
+  animation: strikethrough 0.6s ease forwards;
 }
