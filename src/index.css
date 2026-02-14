@@ -129,3 +129,32 @@
 .animate-slide-right {
   animation: slideInRight 0.5s ease both;
 }
+
+/* Dot grid background */
+.dot-grid {
+  background-image: radial-gradient(circle, hsl(var(--foreground) / 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dot-grid-sparse {
+  background-image: radial-gradient(circle, hsl(var(--foreground) / 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Strikethrough animation */
+@keyframes strikethrough {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.strike-reveal {
+  position: relative;
+}
+.strike-reveal::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  width: 0;
+  background: hsl(var(--foreground) / 0.5);
+  animation: strikethrough 0.6s ease forwards;
+}

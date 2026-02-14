@@ -1,4 +1,5 @@
-import { ScrollReveal } from "@/components/hoot/ScrollReveal";
+import { TextReveal } from "@/components/hoot/ScrollReveal";
+import { FadeReveal, StrikethroughList } from "@/components/hoot/StrikethroughReveal";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
 import { Link } from "react-router-dom";
@@ -62,9 +63,9 @@ function TrustDiagram() {
     <div ref={ref} className="flex flex-col items-center gap-0 max-w-2xl mx-auto">
       <motion.div
         className="border-2 border-foreground p-6 text-center w-full"
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5 }}
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6 }}
       >
         <div className="font-mono text-[10px] text-muted-foreground tracking-wider">ENTITY</div>
         <div className="text-2xl font-bold text-foreground uppercase">HUMAN</div>
@@ -83,9 +84,9 @@ function TrustDiagram() {
       <div className="grid grid-cols-2 gap-0 w-full">
         <motion.div
           className="border border-foreground/10 p-5 text-center"
-          initial={{ opacity: 0, x: -20 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.4 }}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.5, duration: 0.5 }}
         >
           <div className="text-lg font-bold text-foreground">PPAP</div>
           <div className="font-mono text-[10px] text-muted-foreground mt-1">CQS × HTS multiplier</div>
@@ -93,9 +94,9 @@ function TrustDiagram() {
 
         <motion.div
           className="border border-foreground/10 border-l-0 p-5 text-center"
-          initial={{ opacity: 0, x: 20 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.4 }}
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.5, duration: 0.5 }}
         >
           <div className="text-lg font-bold text-foreground">AGENT</div>
           <div className="font-mono text-[10px] text-muted-foreground mt-1">trustBonus = floor(HTS/10)</div>
@@ -111,9 +112,9 @@ function TrustDiagram() {
 
       <motion.div
         className="border border-foreground/10 p-5 text-center max-w-sm w-full"
-        initial={{ opacity: 0, y: 20 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ delay: 0.9, duration: 0.4 }}
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ delay: 0.9, duration: 0.5 }}
       >
         <div className="text-lg font-bold text-foreground">x402 ECONOMY</div>
         <div className="font-mono text-[10px] text-muted-foreground mt-1">Only verified agents process payments</div>
@@ -137,15 +138,21 @@ export default function ProtocolLanding() {
       <Navbar />
 
       {/* ── HERO ── */}
-      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10 relative">
+        <div className="absolute inset-0 dot-grid-sparse opacity-40" />
+        <div className="max-w-[1400px] mx-auto relative z-10">
+          <FadeReveal>
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
               [ PROTOCOL_OVERVIEW ]
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight">
-              THE PROOF LAYER<br />FOR AI DATA<br />AND AGENTS.
-            </h1>
+          </FadeReveal>
+          <TextReveal
+            text="THE PROOF LAYER FOR AI DATA AND AGENTS."
+            as="h1"
+            className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
+          <FadeReveal delay={0.5}>
             <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8">
               An infrastructure protocol that cryptographically proves the provenance
               of AI training data and verifies the trust of agents.
@@ -158,28 +165,33 @@ export default function ProtocolLanding() {
                 READ_WHITEPAPER
               </a>
             </div>
-          </ScrollReveal>
+          </FadeReveal>
         </div>
       </section>
 
       {/* ── WHY NOW — CAUSAL CHAIN ── */}
       <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+          <FadeReveal>
             <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">
               [ CAUSAL_CHAIN ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-4 max-w-3xl uppercase tracking-tight">
-              THREE FAILURES.
-            </h2>
+          </FadeReveal>
+          <TextReveal
+            text="THREE FAILURES."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-4 max-w-3xl uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
+          <FadeReveal delay={0.2}>
             <p className="text-base text-muted-foreground max-w-lg mb-10 font-mono">
               If #1 isn't solved, #2 is impossible. If #2 isn't solved, #3 is impossible.
             </p>
-          </ScrollReveal>
+          </FadeReveal>
 
           <div className="space-y-0 border border-foreground/10">
             {CAUSAL_CHAIN.map((c, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
+              <FadeReveal key={i} delay={i * 0.12}>
                 <div className={`p-6 md:p-8 ${i < CAUSAL_CHAIN.length - 1 ? "border-b border-foreground/10" : ""}`}>
                   <div className="flex items-start gap-4">
                     <span className="font-mono text-[10px] font-bold text-destructive border border-destructive px-1.5 py-0.5 shrink-0">
@@ -192,27 +204,31 @@ export default function ProtocolLanding() {
                     </div>
                   </div>
                 </div>
-              </ScrollReveal>
+              </FadeReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── WHAT HOOTS PROVES ── */}
-      <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+      {/* ── WHAT HOOT PROVES ── */}
+      <section className="py-16 px-6 md:px-10 border-b border-foreground/10 relative">
+        <div className="absolute inset-0 dot-grid opacity-30" />
+        <div className="max-w-[1400px] mx-auto relative z-10">
+          <FadeReveal>
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ PROTOCOL_OUTPUTS ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight">
-              THREE OUTPUTS.<br />ONE TRUST MODEL.
-            </h2>
-          </ScrollReveal>
+          </FadeReveal>
+          <TextReveal
+            text="THREE OUTPUTS. ONE TRUST MODEL."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
 
           <div className="space-y-0 border border-foreground/10">
             {OUTPUTS.map((o, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
+              <FadeReveal key={i} delay={i * 0.1}>
                 <div className={`p-6 md:p-8 ${i < OUTPUTS.length - 1 ? "border-b border-foreground/10" : ""}`}>
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex-1">
@@ -259,7 +275,7 @@ export default function ProtocolLanding() {
                     )}
                   </div>
                 </div>
-              </ScrollReveal>
+              </FadeReveal>
             ))}
           </div>
         </div>
@@ -268,14 +284,17 @@ export default function ProtocolLanding() {
       {/* ── TRUST ARCHITECTURE ── */}
       <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+          <FadeReveal>
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ TRUST_ARCHITECTURE ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight">
-              ONE-WAY TRUST FLOW.
-            </h2>
-          </ScrollReveal>
+          </FadeReveal>
+          <TextReveal
+            text="ONE-WAY TRUST FLOW."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
           <TrustDiagram />
         </div>
       </section>
@@ -283,10 +302,13 @@ export default function ProtocolLanding() {
       {/* ── BUILD + CTA ── */}
       <section className="py-20 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto text-center">
-          <ScrollReveal>
-            <h2 className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-6">
-              VERIFIED DATA.<br />TRUSTED AGENTS.<br />BUILT ON HOOT.
-            </h2>
+          <TextReveal
+            text="VERIFIED DATA. TRUSTED AGENTS. BUILT ON HOOT."
+            as="h2"
+            className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-6"
+            staggerDelay={0.05}
+          />
+          <FadeReveal delay={0.4}>
             <div className="flex gap-3 justify-center flex-wrap mt-8">
               <a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
                 DEVELOPER_DOCS
@@ -301,9 +323,9 @@ export default function ProtocolLanding() {
                 REQUEST_DECK
               </a>
             </div>
-          </ScrollReveal>
+          </FadeReveal>
 
-          <ScrollReveal delay={0.2}>
+          <FadeReveal delay={0.5}>
             <div className="mt-12 flex flex-wrap gap-4 justify-center font-mono text-[10px] text-muted-foreground">
               <span>NVIDIA_INCEPTION</span>
               <span>·</span>
@@ -316,7 +338,7 @@ export default function ProtocolLanding() {
             <p className="mt-4 font-mono text-[10px] text-muted-foreground">
               zkTLS (2⁻¹²⁸) · FROST 5-of-5 · ERC-8004 · ARBITRUM ONE
             </p>
-          </ScrollReveal>
+          </FadeReveal>
         </div>
       </section>
 

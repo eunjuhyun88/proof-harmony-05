@@ -1,4 +1,5 @@
-import { ScrollReveal } from "@/components/hoot/ScrollReveal";
+import { TextReveal } from "@/components/hoot/ScrollReveal";
+import { FadeReveal, StrikethroughList } from "@/components/hoot/StrikethroughReveal";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
 import { motion } from "framer-motion";
@@ -23,15 +24,21 @@ export default function AgentsLanding() {
       <Navbar />
 
       {/* ── HERO ── */}
-      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10 relative">
+        <div className="absolute inset-0 dot-grid-sparse opacity-40" />
+        <div className="max-w-[1400px] mx-auto relative z-10">
+          <FadeReveal>
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
               [ AGENT_VERIFICATION ]
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight">
-              TRUST FOR THE<br />AGENT ECONOMY.
-            </h1>
+          </FadeReveal>
+          <TextReveal
+            text="TRUST FOR THE AGENT ECONOMY."
+            as="h1"
+            className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
+          <FadeReveal delay={0.5}>
             <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8">
               Autonomous agents need more than code. They need accountable humans behind them.
               Hoot connects agent capability to human reputation.
@@ -44,54 +51,72 @@ export default function AgentsLanding() {
                 GET_CREDENTIAL
               </a>
             </div>
-          </ScrollReveal>
+          </FadeReveal>
         </div>
       </section>
 
       {/* ── THE GAP ── */}
       <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+          <FadeReveal>
             <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">
               [ CRITICAL_GAP ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 max-w-3xl uppercase tracking-tight">
-              1.2 MILLION UNVERIFIED<br />AGENTS IN ONE WEEK.
-            </h2>
-          </ScrollReveal>
+          </FadeReveal>
+          <TextReveal
+            text="1.2 MILLION UNVERIFIED AGENTS IN ONE WEEK."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-6 max-w-3xl uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
 
-          <ScrollReveal delay={0.1}>
+          <FadeReveal delay={0.2}>
             <div className="max-w-3xl space-y-4">
               <p className="text-base text-muted-foreground leading-relaxed">
                 The agent economy is growing faster than its trust infrastructure.
                 Current solutions verify one thing at a time — identity, or security, or feedback.
                 Not the full picture.
               </p>
-              <div className="border border-foreground/10 p-4">
+
+              <StrikethroughList
+                items={[
+                  { text: "Identity-only verification → incomplete", struck: true },
+                  { text: "Security-only scanning → insufficient", struck: true },
+                  { text: "Feedback-only ratings → gameable", struck: true },
+                ]}
+                itemClassName="font-mono text-sm py-1"
+                stagger={0.18}
+              />
+
+              <div className="border border-foreground/10 p-4 mt-4">
                 <p className="text-sm font-bold text-foreground uppercase tracking-tight">
                   Hoot verifies the full stack: the code, the security, the performance,
                   the on-chain history — and the human who built it.
                 </p>
               </div>
             </div>
-          </ScrollReveal>
+          </FadeReveal>
         </div>
       </section>
 
       {/* ── SCENARIO ── */}
-      <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+      <section className="py-16 px-6 md:px-10 border-b border-foreground/10 relative">
+        <div className="absolute inset-0 dot-grid opacity-30" />
+        <div className="max-w-[1400px] mx-auto relative z-10">
+          <FadeReveal>
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ SCENARIO_BUILD_TRUST ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-10 uppercase tracking-tight">
-              BUILD TRUST ONCE.<br />DEPLOY EVERYWHERE.
-            </h2>
-          </ScrollReveal>
+          </FadeReveal>
+          <TextReveal
+            text="BUILD TRUST ONCE. DEPLOY EVERYWHERE."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-10 uppercase tracking-tight"
+            staggerDelay={0.04}
+          />
 
-          <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
-            <ScrollReveal>
+          <FadeReveal delay={0.2}>
+            <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
               <div className="border-b md:border-b-0 md:border-r border-foreground/10">
                 <div className="bg-secondary px-4 py-2.5 border-b border-foreground/10">
                   <span className="font-mono text-xs font-bold text-foreground">AGENT_CREDENTIAL</span>
@@ -130,9 +155,7 @@ export default function AgentsLanding() {
                   </motion.div>
                 </div>
               </div>
-            </ScrollReveal>
 
-            <ScrollReveal delay={0.2}>
               <div className="p-6 md:p-8 flex flex-col justify-center space-y-5">
                 <p className="text-base text-muted-foreground leading-relaxed">
                   Other agents and services can verify that your agent is backed
@@ -160,15 +183,15 @@ export default function AgentsLanding() {
                   ))}
                 </div>
               </div>
-            </ScrollReveal>
-          </div>
+            </div>
+          </FadeReveal>
         </div>
       </section>
 
       {/* ── CTA ── */}
       <section className="py-20 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto text-center">
-          <ScrollReveal>
+          <FadeReveal>
             <div className="border border-foreground/10 p-8 mb-8 inline-block">
               <p className="font-mono text-base text-muted-foreground">
                 30K+ agents on ERC-8004. <span className="text-destructive font-bold">0 verified.</span> Be first.
@@ -182,7 +205,7 @@ export default function AgentsLanding() {
                 DOWNLOAD_BROWSER
               </Link>
             </div>
-          </ScrollReveal>
+          </FadeReveal>
         </div>
       </section>
 
