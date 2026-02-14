@@ -1,211 +1,117 @@
-import { TextReveal } from "@/components/hoot/ScrollReveal";
-import { FadeReveal, StrikethroughList } from "@/components/hoot/StrikethroughReveal";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const TRACKS = [
-  {
-    track: "TRACK_A: EXTERNAL",
-    desc: "Any ERC-8004 agent. Technical verification.",
-    cost: "50–300 HOOTS",
-  },
-  {
-    track: "TRACK_B: NATIVE",
-    desc: "Built in Hoot Browser. Full trust inheritance.",
-    cost: "INCLUDED",
-  },
-];
+import { useInView } from "@/hooks/useInView";
 
 export default function AgentsLanding() {
+  const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.3 });
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* ── HERO ── */}
-      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10 relative">
-        <div className="absolute inset-0 dot-grid-sparse opacity-40" />
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <FadeReveal>
-            <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
-              [ AGENT_VERIFICATION ]
-            </div>
-          </FadeReveal>
-          <TextReveal
-            text="TRUST FOR THE AGENT ECONOMY."
-            as="h1"
-            className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight"
-            staggerDelay={0.04}
-          />
-          <FadeReveal delay={0.5}>
-            <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8">
-              Autonomous agents need more than code. They need accountable humans behind them.
-              Hoot connects agent capability to human reputation.
-            </p>
-            <div className="flex gap-3 flex-wrap">
-              <a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
-                REGISTER_AGENT
-              </a>
-              <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
-                GET_CREDENTIAL
-              </a>
-            </div>
-          </FadeReveal>
+      {/* Hero */}
+      <section ref={heroRef} className="h-screen flex items-center justify-center px-6">
+        <div className="text-center max-w-[700px]">
+          <motion.div
+            className="font-mono text-[11px] text-primary tracking-[0.3em] mb-6"
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.2 }}
+          >
+            AGENT CREDENTIALS
+          </motion.div>
+          <motion.h1
+            className="text-5xl md:text-7xl font-bold text-foreground tracking-[-2px] mb-4"
+            initial={{ opacity: 0, y: 40 }}
+            animate={heroInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Build agents<br />people can trust.
+          </motion.h1>
+          <motion.p
+            className="text-lg text-muted-foreground max-w-lg mx-auto mb-8"
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.5 }}
+          >
+            30,000+ agents on ERC-8004. Most can't prove who built them. Yours can.
+          </motion.p>
+          <motion.div
+            className="flex gap-3 justify-center flex-wrap"
+            initial={{ opacity: 0 }}
+            animate={heroInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.6 }}
+          >
+            <a href="#" className="px-7 py-3 bg-primary text-primary-foreground font-semibold text-sm">Register Agent</a>
+            <a href="#" className="px-7 py-3 border border-border text-foreground text-sm">Get Credential</a>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── THE GAP ── */}
-      <section className="py-16 px-6 md:px-10 border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto">
-          <FadeReveal>
-            <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">
-              [ CRITICAL_GAP ]
+      {/* Credential Demo */}
+      <section className="py-20 px-6 md:px-10">
+        <div className="max-w-[700px] mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-6 tracking-tight">Agent Credential</h2>
+          <div className="bg-hoot-terminal border border-border rounded-[14px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+            <div className="px-4 py-3 flex items-center gap-2 border-b border-border">
+              <div className="flex gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-hoot-red/70" />
+                <div className="w-3 h-3 rounded-full bg-hoot-amber/70" />
+                <div className="w-3 h-3 rounded-full bg-hoot-green/70" />
+              </div>
+              <span className="font-mono text-[11px] text-muted-foreground ml-2">Agent Credential</span>
             </div>
-          </FadeReveal>
-          <TextReveal
-            text="1.2 MILLION UNVERIFIED AGENTS IN ONE WEEK."
-            as="h2"
-            className="text-4xl md:text-6xl font-bold text-foreground mb-6 max-w-3xl uppercase tracking-tight"
-            staggerDelay={0.04}
-          />
-
-          <FadeReveal delay={0.2}>
-            <div className="max-w-3xl space-y-4">
-              <p className="text-base text-muted-foreground leading-relaxed">
-                The agent economy is growing faster than its trust infrastructure.
-                Current solutions verify one thing at a time — identity, or security, or feedback.
-                Not the full picture.
-              </p>
-
-              <StrikethroughList
-                items={[
-                  { text: "Identity-only verification → incomplete", struck: true },
-                  { text: "Security-only scanning → insufficient", struck: true },
-                  { text: "Feedback-only ratings → gameable", struck: true },
-                ]}
-                itemClassName="font-mono text-sm py-1"
-                stagger={0.18}
-              />
-
-              <div className="border border-foreground/10 p-4 mt-4">
-                <p className="text-sm font-bold text-foreground uppercase tracking-tight">
-                  Hoot verifies the full stack: the code, the security, the performance,
-                  the on-chain history — and the human who built it.
-                </p>
+            <div className="p-5 font-mono text-[12px] leading-relaxed space-y-3">
+              <div>
+                <span className="text-muted-foreground">Agent: </span>
+                <span className="text-foreground font-bold">SupportBot-v3</span>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Owner: </span>
+                <span className="text-foreground">did:hoot:human:0xA3...7F</span>
+              </div>
+              <div className="border-t border-border pt-3 mt-3">
+                <div className="text-muted-foreground mb-2">Technical Verification:</div>
+                <div className="grid grid-cols-2 gap-1 ml-2">
+                  <span>Code: <span className="text-hoot-green font-bold">88/100</span></span>
+                  <span>Security: <span className="text-hoot-green font-bold">91/100</span></span>
+                  <span>Performance: <span className="text-hoot-green font-bold">85</span></span>
+                  <span>On-chain: <span className="text-muted-foreground">NEW</span></span>
+                </div>
+              </div>
+              <div className="border-t border-border pt-3">
+                <div className="text-muted-foreground mb-1">Human Trust (inherited):</div>
+                <div className="ml-2">
+                  Owner HTS: <span className="text-hoot-green font-bold">82 (GOLD)</span> → trustBonus: <span className="text-primary">+8</span>
+                </div>
+              </div>
+              <div className="border-t border-border pt-3 text-muted-foreground">
+                <div>Trust-Gated: <span className="text-foreground">Eligible for high-value tx</span></div>
               </div>
             </div>
-          </FadeReveal>
+          </div>
+          <p className="text-sm text-muted-foreground mt-6 leading-relaxed">
+            4-axis technical verification + human trust inheritance. Your reputation becomes your agent's credential.
+          </p>
         </div>
       </section>
 
-      {/* ── SCENARIO ── */}
-      <section className="py-16 px-6 md:px-10 border-b border-foreground/10 relative">
-        <div className="absolute inset-0 dot-grid opacity-30" />
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <FadeReveal>
-            <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
-              [ SCENARIO_BUILD_TRUST ]
-            </div>
-          </FadeReveal>
-          <TextReveal
-            text="BUILD TRUST ONCE. DEPLOY EVERYWHERE."
-            as="h2"
-            className="text-4xl md:text-6xl font-bold text-foreground mb-10 uppercase tracking-tight"
-            staggerDelay={0.04}
-          />
-
-          <FadeReveal delay={0.2}>
-            <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
-              <div className="border-b md:border-b-0 md:border-r border-foreground/10">
-                <div className="bg-secondary px-4 py-2.5 border-b border-foreground/10">
-                  <span className="font-mono text-xs font-bold text-foreground">AGENT_CREDENTIAL</span>
-                </div>
-                <div className="p-5 space-y-4">
-                  <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider">YOUR REPUTATION → YOUR AGENT'S TRUST</div>
-
-                  <div className="border border-foreground/10 p-3">
-                    <div className="font-mono text-[10px] text-muted-foreground mb-1">14 months of verified AI work</div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-foreground">Trust tier:</span>
-                      <span className="font-mono text-[10px] font-bold border border-hoot-green text-hoot-green px-1.5 py-0.5">GOLD</span>
-                    </div>
-                  </div>
-
-                  <div className="border border-foreground/10 p-3">
-                    <div className="font-mono text-[10px] text-muted-foreground mb-2">YOUR AGENT:</div>
-                    <div className="space-y-1.5 text-sm text-foreground">
-                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Code verified</div>
-                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Security scanned</div>
-                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Performance tested</div>
-                      <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Trust inherited from you</div>
-                    </div>
-                  </div>
-
-                  <motion.div
-                    className="border-t border-foreground/10 pt-3 font-mono text-[11px] space-y-1"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    viewport={{ once: true }}
-                  >
-                    <p className="text-foreground font-bold">AUTONOMY WITH ACCOUNTABILITY.</p>
-                    <p className="text-muted-foreground">Agent succeeds → your trust grows.</p>
-                    <p className="text-muted-foreground">Agent fails → your trust is at stake.</p>
-                  </motion.div>
-                </div>
-              </div>
-
-              <div className="p-6 md:p-8 flex flex-col justify-center space-y-5">
-                <p className="text-base text-muted-foreground leading-relaxed">
-                  Other agents and services can verify that your agent is backed
-                  by a real, accountable human with a real track record.
-                </p>
-                <div className="border border-foreground/10 p-4">
-                  <p className="text-sm font-bold text-foreground uppercase tracking-tight">
-                    Your reputation follows your agent. Build trust once, deploy everywhere.
-                  </p>
-                </div>
-
-                {/* Two Tracks */}
-                <div className="space-y-0 mt-4 border border-foreground/10">
-                  <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider bg-secondary px-3 py-2 border-b border-foreground/10">
-                    TWO_TRACKS
-                  </div>
-                  {TRACKS.map((t, i) => (
-                    <div key={i} className={`flex justify-between items-start p-3 ${i === 0 ? "border-b border-foreground/10" : ""}`}>
-                      <div>
-                        <div className="text-xs font-bold text-foreground">{t.track}</div>
-                        <div className="font-mono text-[10px] text-muted-foreground mt-0.5">{t.desc}</div>
-                      </div>
-                      <span className="font-mono text-[10px] font-bold text-foreground border border-foreground/10 px-1.5 py-0.5 shrink-0">{t.cost}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </FadeReveal>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="py-20 px-6 md:px-10 border-b border-foreground/10">
-        <div className="max-w-[1400px] mx-auto text-center">
-          <FadeReveal>
-            <div className="border border-foreground/10 p-8 mb-8 inline-block">
-              <p className="font-mono text-base text-muted-foreground">
-                30K+ agents on ERC-8004. <span className="text-destructive font-bold">0 verified.</span> Be first.
-              </p>
-            </div>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <a href="#" className="px-8 py-3.5 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
-                REGISTER_AGENT
-              </a>
-              <Link to="/" className="px-8 py-3.5 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
-                DOWNLOAD_BROWSER
-              </Link>
-            </div>
-          </FadeReveal>
+      {/* Trust Flow */}
+      <section className="py-16 px-6 md:px-10">
+        <div className="max-w-[500px] mx-auto text-center">
+          <h2 className="text-xl font-bold text-foreground mb-4 tracking-tight">Trust flows one direction.</h2>
+          <p className="text-base text-muted-foreground mb-6">
+            Human → Data → Agent. Never backwards.
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Your agent can't inflate your trust score. Only you can build your reputation through consistent, high-quality interactions.
+          </p>
+          <div className="flex gap-3 justify-center mt-8">
+            <a href="#" className="px-7 py-3 bg-primary text-primary-foreground font-semibold text-sm">Register Agent</a>
+            <Link to="/" className="px-7 py-3 border border-border text-foreground text-sm">Download Browser</Link>
+          </div>
         </div>
       </section>
 

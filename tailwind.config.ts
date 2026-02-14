@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["'Space Grotesk'", "sans-serif"],
-        sans: ["'Space Grotesk'", "sans-serif"],
+        display: ["'Sora'", "sans-serif"],
+        sans: ["'Sora'", "sans-serif"],
         mono: ["'Space Mono'", "monospace"],
       },
       colors: {
@@ -63,19 +63,13 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         hoot: {
-          black: "hsl(var(--hoot-black))",
-          blue: "hsl(var(--hoot-blue))",
-          red: "hsl(var(--hoot-red))",
           green: "hsl(var(--hoot-green))",
-          orange: "hsl(var(--hoot-orange))",
-          purple: "hsl(var(--hoot-purple))",
-          "warm-gray": "hsl(var(--hoot-warm-gray))",
+          blue: "hsl(var(--hoot-blue))",
+          cyan: "hsl(var(--hoot-cyan))",
+          amber: "hsl(var(--hoot-amber))",
+          red: "hsl(var(--hoot-red))",
           surface: "hsl(var(--hoot-surface))",
-          "surface-alt": "hsl(var(--hoot-surface-alt))",
-          text: "hsl(var(--hoot-text))",
-          "text-mid": "hsl(var(--hoot-text-mid))",
-          "text-dim": "hsl(var(--hoot-text-dim))",
-          "text-faint": "hsl(var(--hoot-text-faint))",
+          terminal: "hsl(var(--hoot-terminal))",
         },
       },
       borderRadius: {
