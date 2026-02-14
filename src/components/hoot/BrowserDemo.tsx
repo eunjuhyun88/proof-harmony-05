@@ -92,23 +92,22 @@ export function BrowserDemo() {
   const done = verifyStage >= 4;
 
   return (
-    <div ref={sectionRef}>
-      {/* Browser Window */}
-      <div className="bg-background border border-foreground/10 overflow-hidden">
-        {/* Title bar */}
-        <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-foreground/10">
-          <div className="font-mono text-xs font-bold text-foreground tracking-wider">HOOT_BROWSER</div>
-          <div className="flex-1 ml-2 bg-background border border-foreground/10 px-3 py-1 font-mono text-[10px] text-muted-foreground truncate">
-            claude.ai — Sarah's workspace
-          </div>
-          <div className="font-mono text-[10px] text-muted-foreground hidden sm:block">
-            <span className="text-hoot-green">●</span> Sarah.eth
-          </div>
+    <div ref={sectionRef} className="h-[80vh] max-h-[700px] flex flex-col bg-background border border-foreground/10 overflow-hidden">
+      {/* Title bar */}
+      <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-foreground/10 shrink-0">
+        <div className="font-mono text-xs font-bold text-foreground tracking-wider">HOOT_BROWSER</div>
+        <div className="flex-1 ml-2 bg-background border border-foreground/10 px-3 py-1 font-mono text-[10px] text-muted-foreground truncate">
+          claude.ai — Sarah's workspace
         </div>
+        <div className="font-mono text-[10px] text-muted-foreground hidden sm:block">
+          <span className="text-hoot-green">●</span> Sarah.eth
+        </div>
+      </div>
 
+      {/* Scrollable body */}
+      <div className="flex-1 overflow-y-auto min-h-0">
         {/* Browser body */}
-        <div className="flex min-h-[440px]">
-          {/* Sidebar */}
+        <div className="flex min-h-[400px]">
           <div className="w-14 bg-secondary border-r border-foreground/10 py-4 flex-col items-center gap-5 hidden md:flex">
             {[
               { icon: "🌐", label: "BROWSE", on: true },
@@ -322,10 +321,10 @@ export function BrowserDemo() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Verification pipeline */}
-      {verifyStage >= 1 && (
+        <div className="px-4 pb-4">
+        {/* Verification pipeline */}
+        {verifyStage >= 1 && (
         <div className="mt-8 animate-fade-up">
           <h3 className="text-2xl font-bold text-foreground mb-4 uppercase tracking-tight">
             VERIFICATION PIPELINE
@@ -403,17 +402,19 @@ export function BrowserDemo() {
         </div>
       )}
 
-      {/* Replay */}
-      {!playing && step >= 6 && (
-        <div className="mt-8 text-center">
-          <button
-            onClick={play}
-            className="px-5 py-2 font-mono text-xs font-bold text-foreground border border-foreground hover:bg-foreground hover:text-background transition-colors tracking-wider"
-          >
-            ▶ REPLAY_SESSION
-          </button>
-        </div>
-      )}
+        {/* Replay */}
+        {!playing && step >= 6 && (
+          <div className="mt-8 text-center pb-4">
+            <button
+              onClick={play}
+              className="px-5 py-2 font-mono text-xs font-bold text-foreground border border-foreground hover:bg-foreground hover:text-background transition-colors tracking-wider"
+            >
+              ▶ REPLAY_SESSION
+            </button>
+          </div>
+        )}
+        </div>{/* end px-4 wrapper */}
+      </div>{/* end scrollable body */}
     </div>
   );
 }
