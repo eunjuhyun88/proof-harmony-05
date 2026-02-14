@@ -34,38 +34,54 @@ function HeroSection() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
 
   return (
-    <section ref={ref} className="relative h-screen flex items-center px-6 md:px-10 border-b border-foreground/10 overflow-hidden">
-      {/* Dot grid background */}
-      <div className="absolute inset-0 dot-grid-sparse opacity-60" />
-
-      <motion.div className="max-w-[1400px] mx-auto w-full relative z-10" style={{ y, opacity }}>
+    <section ref={ref} className="relative h-screen flex items-center px-6 md:px-10 border-b-2 border-foreground overflow-hidden bg-foreground">
+      {/* Inverted hero — white on black */}
+      <motion.div
+        className="max-w-[1400px] mx-auto w-full relative z-10"
+        style={{ y, opacity, scale }}
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
         >
-          <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
-            [ PROOF_PROTOCOL_ACTIVE ]
+          <div className="font-mono text-[11px] text-background/50 tracking-[0.3em] mb-8">
+            PROOF_PROTOCOL — V1.0
           </div>
         </motion.div>
 
-        <TextReveal
-          text="THE PROOF PROTOCOL FOR THE AI ERA."
-          as="h1"
-          className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight"
-          staggerDelay={0.05}
-          delay={0.3}
-        />
+        <motion.h1
+          className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background leading-[0.9] mb-4 max-w-6xl uppercase tracking-tighter"
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        >
+          THE PROOF
+          <br />
+          PROTOCOL
+        </motion.h1>
 
-        <motion.p
-          className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8"
+        <motion.div
+          className="flex items-baseline gap-4 mb-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
+          <span className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background/20 leading-[0.9] uppercase tracking-tighter">
+            FOR AI.
+          </span>
+        </motion.div>
+
+        <motion.p
+          className="text-lg md:text-xl text-background/60 max-w-lg leading-relaxed mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           Prove your data is real. Prove your agent is trustworthy.
           Own what you create.
@@ -73,28 +89,35 @@ function HeroSection() {
 
         <motion.div
           className="flex gap-3 flex-wrap"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
         >
-          <a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
+          <a href="#" className="px-8 py-4 bg-background text-foreground font-bold text-xs tracking-[0.2em] hover:bg-background/90 transition-colors">
             TRY_BROWSER
           </a>
-          <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+          <a href="#" className="px-8 py-4 border-2 border-background/30 text-background font-bold text-xs tracking-[0.2em] hover:border-background hover:bg-background hover:text-foreground transition-all">
             READ_DOCS
           </a>
         </motion.div>
 
         <motion.div
-          className="mt-14 pt-6 border-t border-foreground/10"
+          className="mt-16 pt-6 border-t border-background/10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.3, duration: 0.6 }}
+          transition={{ delay: 1.0, duration: 0.6 }}
         >
-          <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-3">BUILDING_WITH</div>
-          <div className="flex flex-wrap gap-6 items-center">
-            {PARTNERS.map((p) => (
-              <span key={p} className="text-xs font-mono text-muted-foreground/50 tracking-wider">{p}</span>
+          <div className="flex flex-wrap gap-8 items-center">
+            {PARTNERS.map((p, i) => (
+              <motion.span
+                key={p}
+                className="text-[11px] font-mono text-background/30 tracking-[0.15em]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.1 + i * 0.08 }}
+              >
+                {p}
+              </motion.span>
             ))}
           </div>
         </motion.div>
@@ -105,13 +128,13 @@ function HeroSection() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.6 }}
+        transition={{ delay: 1.4 }}
       >
-        <span className="font-mono text-[9px] text-muted-foreground tracking-widest">SCROLL</span>
+        <span className="font-mono text-[9px] text-background/40 tracking-widest">SCROLL</span>
         <motion.div
-          className="w-px h-8 bg-foreground/20"
-          animate={{ scaleY: [1, 0.3, 1] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-10 bg-background/20"
+          animate={{ scaleY: [1, 0.2, 1] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           style={{ transformOrigin: "top" }}
         />
       </motion.div>
@@ -127,17 +150,28 @@ function NarrativeSection() {
       content: (
         <div className="px-6 md:px-10 w-full">
           <div className="max-w-[1400px] mx-auto">
-            <FadeReveal>
-              <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">[ CRITICAL_GAP ]</div>
-            </FadeReveal>
-            <TextReveal
-              text="YOUR AI WORK HAS NO PROOF."
-              as="h2"
-              className="text-4xl md:text-6xl lg:text-[80px] font-bold text-foreground leading-[0.95] mb-8 max-w-4xl uppercase tracking-tight"
-              staggerDelay={0.04}
-            />
-            <FadeReveal delay={0.4}>
-              <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-6">
+            <motion.div
+              className="font-mono text-[11px] text-destructive tracking-[0.3em] mb-6"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+            >
+              CRITICAL_GAP
+            </motion.div>
+            <motion.h2
+              className="text-5xl md:text-7xl lg:text-[100px] font-bold text-foreground leading-[0.9] mb-8 max-w-5xl uppercase tracking-tighter"
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              YOUR AI WORK
+              <br />
+              <span className="text-muted-foreground/40">HAS NO PROOF.</span>
+            </motion.h2>
+            <FadeReveal delay={0.2}>
+              <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
                 Every day you prompt, refine, correct, and orchestrate AI tools.
                 That work produces some of the most valuable training data in existence.
               </p>
@@ -147,7 +181,7 @@ function NarrativeSection() {
                   { text: "API logs → private, unverifiable", struck: true },
                   { text: "Self-declaration → Sybil-vulnerable", struck: true },
                 ]}
-                itemClassName="font-mono text-sm py-1"
+                itemClassName="font-mono text-base py-2"
                 stagger={0.2}
                 delay={0.2}
               />
@@ -161,17 +195,28 @@ function NarrativeSection() {
       content: (
         <div className="px-6 md:px-10 w-full">
           <div className="max-w-[1400px] mx-auto">
-            <FadeReveal>
-              <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">[ DATA_CRISIS ]</div>
-            </FadeReveal>
-            <TextReveal
-              text="TRAINING DATA IS RUNNING OUT."
-              as="h2"
-              className="text-4xl md:text-6xl lg:text-[80px] font-bold text-foreground leading-[0.95] mb-8 max-w-4xl uppercase tracking-tight"
-              staggerDelay={0.04}
-            />
-            <FadeReveal delay={0.4}>
-              <p className="text-base text-muted-foreground max-w-xl leading-relaxed">
+            <motion.div
+              className="font-mono text-[11px] text-destructive tracking-[0.3em] mb-6"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+            >
+              DATA_CRISIS
+            </motion.div>
+            <motion.h2
+              className="text-5xl md:text-7xl lg:text-[100px] font-bold text-foreground leading-[0.9] mb-8 max-w-5xl uppercase tracking-tighter"
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              TRAINING DATA
+              <br />
+              <span className="text-muted-foreground/40">IS RUNNING OUT.</span>
+            </motion.h2>
+            <FadeReveal delay={0.2}>
+              <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
                 AI companies face a crisis: synthetic alternatives degrade models,
                 and the agent economy is scaling with no trust infrastructure.
                 That's the gap Hoot fills.
@@ -371,25 +416,24 @@ function ScenariosSection() {
   );
 }
 
-/* ── Trust Model with restrained motion ── */
+/* ── Trust Model — bold visual block ── */
 function TrustModelSection() {
   return (
-    <section className="py-20 px-6 md:px-10 border-b border-foreground/10 relative">
-      <div className="absolute inset-0 dot-grid opacity-40" />
+    <section className="py-24 px-6 md:px-10 border-b-2 border-foreground relative bg-foreground text-background">
       <div className="max-w-[1400px] mx-auto relative z-10">
         <FadeReveal>
-          <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">[ TRUST_MODEL ]</div>
+          <div className="font-mono text-[11px] text-background/40 tracking-[0.3em] mb-4">TRUST_MODEL</div>
         </FadeReveal>
 
         <TextReveal
           text="TRUST FLOWS ONE DIRECTION."
           as="h2"
-          className="text-4xl md:text-6xl font-bold text-foreground mb-6 uppercase tracking-tight max-w-4xl"
+          className="text-4xl md:text-7xl font-bold text-background mb-6 uppercase tracking-tighter max-w-4xl"
           staggerDelay={0.04}
         />
 
         <FadeReveal delay={0.3}>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mb-10">
+          <p className="text-lg text-background/50 leading-relaxed max-w-2xl mb-12">
             Humans create trust. That trust determines the value of data.
             Agents operate on top of that data. Agents cannot elevate a human's trust.
           </p>
@@ -397,34 +441,34 @@ function TrustModelSection() {
 
         <div className="max-w-2xl mx-auto">
           <FadeReveal>
-            <div className="border-2 border-foreground p-6 text-center">
-              <div className="font-mono text-[10px] text-muted-foreground tracking-wider">ENTITY</div>
-              <div className="text-2xl font-bold text-foreground uppercase">HUMAN</div>
-              <div className="font-mono text-[10px] text-muted-foreground mt-1">Creates trust</div>
+            <div className="border-2 border-background p-8 text-center">
+              <div className="font-mono text-[11px] text-background/40 tracking-[0.2em]">ENTITY</div>
+              <div className="text-4xl font-bold text-background uppercase tracking-tighter">HUMAN</div>
+              <div className="font-mono text-[11px] text-background/40 mt-2">Creates trust</div>
             </div>
           </FadeReveal>
 
           <FadeReveal delay={0.2}>
-            <div className="text-center py-2 text-foreground/30 text-lg">
-              ↓ TRUST_INHERITANCE (one-way)
+            <div className="text-center py-3 text-background/20 text-2xl font-bold">
+              ↓
             </div>
           </FadeReveal>
 
           <FadeReveal delay={0.3}>
             <div className="grid grid-cols-2 gap-0">
-              <div className="border border-foreground/10 p-5 text-center">
-                <div className="text-lg font-bold text-foreground uppercase">DATA</div>
-                <div className="font-mono text-[10px] text-muted-foreground mt-1">CQS × HTS multiplier</div>
+              <div className="border border-background/20 p-6 text-center">
+                <div className="text-xl font-bold text-background uppercase tracking-tight">DATA</div>
+                <div className="font-mono text-[10px] text-background/30 mt-1">CQS × HTS</div>
               </div>
-              <div className="border border-foreground/10 border-l-0 p-5 text-center">
-                <div className="text-lg font-bold text-foreground uppercase">AGENT</div>
-                <div className="font-mono text-[10px] text-muted-foreground mt-1">trustBonus = floor(HTS/10)</div>
+              <div className="border border-background/20 border-l-0 p-6 text-center">
+                <div className="text-xl font-bold text-background uppercase tracking-tight">AGENT</div>
+                <div className="font-mono text-[10px] text-background/30 mt-1">trustBonus = floor(HTS/10)</div>
               </div>
             </div>
           </FadeReveal>
 
           <FadeReveal delay={0.4}>
-            <div className="font-mono text-[10px] text-muted-foreground text-center mt-4">
+            <div className="font-mono text-[11px] text-background/30 text-center mt-6 tracking-wider">
               RULE: ONE-WAY ONLY. NO REVERSE INHERITANCE.
             </div>
           </FadeReveal>
@@ -492,20 +536,25 @@ export default function Index() {
       </section>
 
       {/* ── CTA ── */}
-      <section id="waitlist" className="py-20 px-6 md:px-10 border-b border-foreground/10">
+      <section id="waitlist" className="py-28 px-6 md:px-10 border-b-2 border-foreground">
         <div className="max-w-[1400px] mx-auto text-center">
-          <TextReveal
-            text="YOUR DATA. YOUR AGENTS. YOUR PROOF."
-            as="h2"
-            className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-6"
-            staggerDelay={0.06}
-          />
-          <FadeReveal delay={0.5}>
-            <div className="flex gap-3 justify-center flex-wrap mt-8">
-              <a href="#" className="px-8 py-3.5 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
+          <motion.h2
+            className="text-5xl md:text-8xl lg:text-[110px] font-bold text-foreground uppercase tracking-tighter mb-4 leading-[0.9]"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            YOUR DATA.
+            <br />
+            YOUR PROOF.
+          </motion.h2>
+          <FadeReveal delay={0.3}>
+            <div className="flex gap-3 justify-center flex-wrap mt-10">
+              <a href="#" className="px-10 py-4 bg-foreground text-background font-bold text-xs tracking-[0.2em] hover:bg-foreground/90 transition-colors">
                 TRY_BROWSER
               </a>
-              <a href="#" className="px-8 py-3.5 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+              <a href="#" className="px-10 py-4 border-2 border-foreground text-foreground font-bold text-xs tracking-[0.2em] hover:bg-foreground hover:text-background transition-all">
                 READ_DOCS
               </a>
             </div>
