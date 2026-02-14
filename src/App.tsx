@@ -4,8 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import ProtocolLanding from "./pages/ProtocolLanding";
+import BrowserLanding from "./pages/BrowserLanding";
 import AgentsLanding from "./pages/AgentsLanding";
+import NodeLanding from "./pages/NodeLanding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,8 +19,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/protocol" element={<ProtocolLanding />} />
+          <Route path="/browser" element={<BrowserLanding />} />
           <Route path="/agents" element={<AgentsLanding />} />
+          <Route path="/node" element={<NodeLanding />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
