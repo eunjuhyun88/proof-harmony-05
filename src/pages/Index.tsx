@@ -1,4 +1,4 @@
-import { ScrollReveal } from "@/components/hoot/ScrollReveal";
+import { ScrollReveal, TextReveal, LineReveal, StaggerContainer, StaggerItem } from "@/components/hoot/ScrollReveal";
 import { BrowserDemo } from "@/components/hoot/BrowserDemo";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
@@ -50,19 +50,32 @@ export default function Index() {
       {/* ── S1: HERO ── */}
       <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto">
-          <ScrollReveal>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
               [ PROOF_PROTOCOL_ACTIVE ]
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight">
-              THE PROOF<br />
-              PROTOCOL<br />
-              FOR THE AI ERA.
-            </h1>
+          </motion.div>
+
+          <TextReveal
+            text="THE PROOF PROTOCOL FOR THE AI ERA."
+            as="h1"
+            className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight"
+            staggerDelay={0.05}
+            delay={0.3}
+          />
+
+          <ScrollReveal delay={0.8} distance={30}>
             <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8">
               Prove your data is real. Prove your agent is trustworthy.
               Own what you create.
             </p>
+          </ScrollReveal>
+
+          <ScrollReveal delay={1} distance={20}>
             <div className="flex gap-3 flex-wrap">
               <a
                 href="#"
@@ -79,18 +92,20 @@ export default function Index() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.3}>
+          <ScrollReveal delay={1.2} distance={20}>
             <div className="mt-14 pt-6 border-t border-foreground/10">
               <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-3">
                 BUILDING_WITH
               </div>
-              <div className="flex flex-wrap gap-6 items-center">
+              <StaggerContainer className="flex flex-wrap gap-6 items-center" stagger={0.08} delay={1.4}>
                 {PARTNERS.map((p) => (
-                  <span key={p} className="text-xs font-mono text-muted-foreground/50 tracking-wider">
-                    {p}
-                  </span>
+                  <StaggerItem key={p}>
+                    <span className="text-xs font-mono text-muted-foreground/50 tracking-wider">
+                      {p}
+                    </span>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             </div>
           </ScrollReveal>
         </div>
@@ -103,33 +118,32 @@ export default function Index() {
             <div className="font-mono text-[10px] text-destructive tracking-wider mb-4">
               [ CRITICAL_GAP ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-8 max-w-3xl uppercase tracking-tight">
-              YOUR AI WORK HAS NO PROOF.
-            </h2>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.1}>
-            <div className="max-w-3xl space-y-5">
-              <p className="text-base text-muted-foreground leading-relaxed">
-                Every day you prompt, refine, correct, and orchestrate AI tools.
-                That work produces some of the most valuable training data in existence —
-                the kind that teaches AI how humans actually think and decide.
+          <TextReveal
+            text="YOUR AI WORK HAS NO PROOF."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-8 max-w-3xl uppercase tracking-tight"
+            staggerDelay={0.05}
+          />
+
+          <LineReveal
+            lines={[
+              "Every day you prompt, refine, correct, and orchestrate AI tools. That work produces some of the most valuable training data in existence — the kind that teaches AI how humans actually think and decide.",
+              "None of it is yours. There's no record that you created it. No proof it came from a real person. No way to verify its quality. It vanishes into platforms that profit from it without your knowledge or consent.",
+              "Meanwhile, AI companies face a crisis: training data is running out, synthetic alternatives degrade models, and the agent economy is scaling with no trust infrastructure.",
+            ]}
+            className="max-w-3xl"
+            lineClassName="text-base text-muted-foreground leading-relaxed mb-5"
+            delay={0.2}
+            staggerDelay={0.15}
+          />
+
+          <ScrollReveal delay={0.6} distance={30}>
+            <div className="border border-foreground/10 p-5 mt-6 max-w-3xl">
+              <p className="text-lg font-bold text-foreground uppercase tracking-tight">
+                That's the gap Hoot fills.
               </p>
-              <p className="text-base text-muted-foreground leading-relaxed">
-                None of it is yours. There's no record that you created it.
-                No proof it came from a real person. No way to verify its quality.
-                It vanishes into platforms that profit from it without your knowledge or consent.
-              </p>
-              <p className="text-base text-foreground leading-relaxed font-bold">
-                Meanwhile, AI companies face a crisis: training data is running out,
-                synthetic alternatives degrade models, and the agent economy is scaling
-                with no trust infrastructure.
-              </p>
-              <div className="border border-foreground/10 p-5 mt-6">
-                <p className="text-lg font-bold text-foreground uppercase tracking-tight">
-                  That's the gap Hoot fills.
-                </p>
-              </div>
             </div>
           </ScrollReveal>
         </div>
@@ -142,22 +156,26 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ THREE_PROOFS ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight">
-              THREE PROOFS.<br />ONE PROTOCOL.
-            </h2>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-0 border border-foreground/10">
+          <TextReveal
+            text="THREE PROOFS. ONE PROTOCOL."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight"
+            staggerDelay={0.06}
+          />
+
+          <StaggerContainer className="grid md:grid-cols-3 gap-0 border border-foreground/10" stagger={0.15}>
             {THREE_PROOFS.map((proof, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
+              <StaggerItem key={i}>
                 <div className={`p-6 md:p-8 ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/10" : ""}`}>
                   <div className="font-mono text-[10px] text-muted-foreground mb-4">{proof.num}</div>
                   <h3 className="text-lg font-bold text-foreground mb-3 uppercase tracking-tight">{proof.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">{proof.desc}</p>
                 </div>
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -168,15 +186,21 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ SCENARIO_CREATOR ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight">
-              SARAH USES AI<br />EVERY DAY.
-            </h2>
+          </ScrollReveal>
+
+          <TextReveal
+            text="SARAH USES AI EVERY DAY."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight"
+          />
+
+          <ScrollReveal delay={0.3} distance={30}>
             <p className="text-lg text-muted-foreground mb-10">Now her work has proof.</p>
           </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
             {/* Chat Mockup */}
-            <ScrollReveal>
+            <ScrollReveal direction="left" distance={40}>
               <div className="border-b md:border-b-0 md:border-r border-foreground/10">
                 <div className="bg-secondary px-4 py-2.5 flex items-center gap-3 border-b border-foreground/10">
                   <span className="font-mono text-xs font-bold text-foreground">HOOT_BROWSER</span>
@@ -199,9 +223,9 @@ export default function Index() {
                   {/* Verification Card */}
                   <motion.div
                     className="border-2 border-foreground p-4 mt-4"
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.5 }}
+                    initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ delay: 0.4, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
                     viewport={{ once: true }}
                   >
                     <div className="font-mono text-[10px] font-bold text-hoot-green tracking-wider mb-3">● SESSION_VERIFIED</div>
@@ -233,7 +257,7 @@ export default function Index() {
             </ScrollReveal>
 
             {/* Description */}
-            <ScrollReveal delay={0.2}>
+            <ScrollReveal direction="right" distance={40} delay={0.2}>
               <div className="p-6 md:p-8 flex flex-col justify-center space-y-5">
                 <p className="text-base text-muted-foreground leading-relaxed">
                   Sarah's AI conversation is verified — that a real person, in a real AI session,
@@ -262,12 +286,15 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ SCENARIO_AI_COMPANY ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight">
-              JAE NEEDS DATA<br />HE CAN TRUST.
-            </h2>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.1}>
+          <TextReveal
+            text="JAE NEEDS DATA HE CAN TRUST."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight"
+          />
+
+          <ScrollReveal delay={0.3} distance={30}>
             <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mb-8">
               Jae is building a customer service AI. He needs good training data. The problem is provenance.
               Web-scraped data can't distinguish AI-generated from human-made.
@@ -276,7 +303,7 @@ export default function Index() {
           </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
-            <ScrollReveal>
+            <ScrollReveal direction="left" distance={40}>
               <div className="border-b md:border-b-0 md:border-r border-foreground/10">
                 <div className="bg-secondary px-4 py-2.5 border-b border-foreground/10">
                   <span className="font-mono text-xs font-bold text-foreground">DATA_HUB</span>
@@ -305,7 +332,7 @@ export default function Index() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal delay={0.2}>
+            <ScrollReveal direction="right" distance={40} delay={0.2}>
               <div className="p-6 md:p-8 flex flex-col justify-center space-y-5">
                 <p className="text-base text-muted-foreground leading-relaxed">
                   What Jae gets isn't just data. It's data with proven provenance —
@@ -330,13 +357,19 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ SCENARIO_AGENT_BUILDER ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight">
-              MIN BUILDS AGENTS.
-            </h2>
+          </ScrollReveal>
+
+          <TextReveal
+            text="MIN BUILDS AGENTS."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight"
+          />
+
+          <ScrollReveal delay={0.3} distance={30}>
             <p className="text-lg text-muted-foreground mb-8">Now they carry his reputation.</p>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.1}>
+          <ScrollReveal delay={0.4} distance={30}>
             <p className="text-base text-muted-foreground leading-relaxed max-w-2xl mb-8">
               30,000+ agents registered on ERC-8004. Most have no way to prove who built them
               or what verification they went through.
@@ -344,7 +377,7 @@ export default function Index() {
           </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-0 border border-foreground/10">
-            <ScrollReveal>
+            <ScrollReveal direction="left" distance={40}>
               <div className="border-b md:border-b-0 md:border-r border-foreground/10">
                 <div className="bg-secondary px-4 py-2.5 border-b border-foreground/10">
                   <span className="font-mono text-xs font-bold text-foreground">AGENT_CREDENTIAL</span>
@@ -375,7 +408,7 @@ export default function Index() {
               </div>
             </ScrollReveal>
 
-            <ScrollReveal delay={0.2}>
+            <ScrollReveal direction="right" distance={40} delay={0.2}>
               <div className="p-6 md:p-8 flex flex-col justify-center space-y-5">
                 <p className="text-base text-muted-foreground leading-relaxed">
                   Min's reputation becomes his agent's trust. This isn't just certification —
@@ -406,12 +439,15 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ TRUST_MODEL ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 uppercase tracking-tight max-w-4xl">
-              TRUST FLOWS<br />ONE DIRECTION.
-            </h2>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.1}>
+          <TextReveal
+            text="TRUST FLOWS ONE DIRECTION."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-6 uppercase tracking-tight max-w-4xl"
+          />
+
+          <ScrollReveal delay={0.3} distance={30}>
             <div className="max-w-2xl space-y-4 mb-10">
               <p className="text-base text-muted-foreground leading-relaxed">
                 Humans create trust. That trust determines the value of data. Agents operate on top of that data.
@@ -421,13 +457,13 @@ export default function Index() {
           </ScrollReveal>
 
           {/* Diagram */}
-          <ScrollReveal delay={0.2}>
+          <ScrollReveal delay={0.4} scale>
             <div className="max-w-2xl mx-auto">
               <motion.div
                 className="border-2 border-foreground p-6 text-center"
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
                 viewport={{ once: true }}
               >
                 <div className="font-mono text-[10px] text-muted-foreground tracking-wider">ENTITY</div>
@@ -437,18 +473,18 @@ export default function Index() {
 
               <motion.div
                 className="text-center py-2 text-foreground/30 text-lg"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                initial={{ opacity: 0, scaleY: 0 }}
+                whileInView={{ opacity: 1, scaleY: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
                 viewport={{ once: true }}
               >↓ TRUST_INHERITANCE (one-way)</motion.div>
 
               <div className="grid grid-cols-2 gap-0">
                 <motion.div
                   className="border border-foreground/10 p-5 text-center"
-                  initial={{ opacity: 0, x: -16 }}
+                  initial={{ opacity: 0, x: -40 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 }}
+                  transition={{ delay: 0.5, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
                   viewport={{ once: true }}
                 >
                   <div className="text-lg font-bold text-foreground uppercase">DATA</div>
@@ -456,9 +492,9 @@ export default function Index() {
                 </motion.div>
                 <motion.div
                   className="border border-foreground/10 border-l-0 p-5 text-center"
-                  initial={{ opacity: 0, x: 16 }}
+                  initial={{ opacity: 0, x: 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 }}
+                  transition={{ delay: 0.5, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
                   viewport={{ once: true }}
                 >
                   <div className="text-lg font-bold text-foreground uppercase">AGENT</div>
@@ -470,7 +506,7 @@ export default function Index() {
                 className="font-mono text-[10px] text-muted-foreground text-center mt-4"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
                 viewport={{ once: true }}
               >
                 RULE: ONE-WAY ONLY. NO REVERSE INHERITANCE.
@@ -487,13 +523,17 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ UNDER_THE_HOOD ]
             </div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {TECH_STACK.map((t) => (
-                <span key={t} className="font-mono text-xs font-bold text-foreground border border-foreground/10 px-3 py-1.5">
+          </ScrollReveal>
+          <StaggerContainer className="flex flex-wrap gap-2 mb-4" stagger={0.08}>
+            {TECH_STACK.map((t) => (
+              <StaggerItem key={t}>
+                <span className="font-mono text-xs font-bold text-foreground border border-foreground/10 px-3 py-1.5 inline-block">
                   {t}
                 </span>
-              ))}
-            </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+          <ScrollReveal delay={0.4} distance={20}>
             <p className="text-sm text-muted-foreground">
               The cryptographic stack behind every proof.{" "}
               <Link to="/protocol" className="text-foreground underline underline-offset-4 hover:text-muted-foreground">READ_DOCS →</Link>
@@ -511,25 +551,38 @@ export default function Index() {
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">
               [ LIVE_DEMO ]
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-2 uppercase tracking-tight">
-              ONE COMMAND,<br />VERIFIED PROOF.
-            </h2>
+          </ScrollReveal>
+
+          <TextReveal
+            text="ONE COMMAND, VERIFIED PROOF."
+            as="h2"
+            className="text-4xl md:text-6xl font-bold text-foreground mb-2 uppercase tracking-tight"
+          />
+
+          <ScrollReveal delay={0.3} distance={30}>
             <p className="text-base text-muted-foreground max-w-lg mb-10">
               Watch a real orchestration — and see how every interaction becomes
               cryptographically yours.
             </p>
           </ScrollReveal>
-          <BrowserDemo />
+
+          <ScrollReveal distance={50} duration={1}>
+            <BrowserDemo />
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ── S9: CTA ── */}
       <section id="waitlist" className="py-20 px-6 md:px-10 border-b border-foreground/10">
         <div className="max-w-[1400px] mx-auto text-center">
-          <ScrollReveal>
-            <h2 className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-6">
-              YOUR DATA.<br />YOUR AGENTS.<br />YOUR PROOF.
-            </h2>
+          <TextReveal
+            text="YOUR DATA. YOUR AGENTS. YOUR PROOF."
+            as="h2"
+            className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-6"
+            staggerDelay={0.06}
+          />
+
+          <ScrollReveal delay={0.5} distance={30}>
             <div className="flex gap-3 justify-center flex-wrap mt-8">
               <a
                 href="#"
@@ -546,10 +599,10 @@ export default function Index() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.2}>
-            <div className="mt-12 grid md:grid-cols-3 gap-0 border border-foreground/10">
-              {TRUST_BLOCKS.map((block, i) => (
-                <div key={i} className={`p-5 text-left ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/10" : ""}`}>
+          <StaggerContainer className="mt-12 grid md:grid-cols-3 gap-0 border border-foreground/10" stagger={0.12} delay={0.3}>
+            {TRUST_BLOCKS.map((block, i) => (
+              <StaggerItem key={i}>
+                <div className={`p-5 text-left ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/10" : ""}`}>
                   <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">{block.title}</h3>
                   <ul className="space-y-1.5">
                     {block.items.map((item, j) => (
@@ -560,9 +613,9 @@ export default function Index() {
                     ))}
                   </ul>
                 </div>
-              ))}
-            </div>
-          </ScrollReveal>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
       </section>
 
