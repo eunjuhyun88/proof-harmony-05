@@ -1,10 +1,13 @@
-import { TextReveal } from "@/components/hoot/ScrollReveal";
+import { TextReveal, ClipReveal, CountUp } from "@/components/hoot/ScrollReveal";
 import { FadeReveal, StrikethroughList } from "@/components/hoot/StrikethroughReveal";
 import { Navbar } from "@/components/hoot/Navbar";
 import { Footer } from "@/components/hoot/Footer";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { useInView } from "@/hooks/useInView";
+
+const SNAP = [0.16, 1, 0.3, 1] as const;
 
 const CAUSAL_CHAIN = [
   {
@@ -61,47 +64,36 @@ function TrustDiagram() {
 
   return (
     <div ref={ref} className="flex flex-col items-center gap-0 max-w-2xl mx-auto">
-      <motion.div
-        className="border-2 border-foreground p-6 text-center w-full"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="font-mono text-[10px] text-muted-foreground tracking-wider">ENTITY</div>
-        <div className="text-2xl font-bold text-foreground uppercase">HUMAN</div>
-        <div className="font-mono text-[10px] text-muted-foreground mt-1">MOLTVC 5-axis · Soulbound · HTS Score</div>
-      </motion.div>
+      <ClipReveal direction="up">
+        <div className="border-2 border-foreground p-6 text-center w-full">
+          <div className="font-mono text-[10px] text-muted-foreground tracking-wider">ENTITY</div>
+          <CountUp value="HUMAN" className="text-2xl font-bold text-foreground uppercase block" />
+          <div className="font-mono text-[10px] text-muted-foreground mt-1">MOLTVC 5-axis · Soulbound · HTS Score</div>
+        </div>
+      </ClipReveal>
 
       <motion.div
         className="font-mono text-xs text-foreground/30 py-2"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: 0.3 }}
+        initial={{ opacity: 0, scaleY: 0 }}
+        animate={inView ? { opacity: 1, scaleY: 1 } : {}}
+        transition={{ delay: 0.3, ease: SNAP }}
+        style={{ transformOrigin: "top" }}
       >
         ↓ TRUST_INHERITANCE
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-0 w-full">
-        <motion.div
-          className="border border-foreground/10 p-5 text-center"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          <div className="text-lg font-bold text-foreground">PPAP</div>
-          <div className="font-mono text-[10px] text-muted-foreground mt-1">CQS × HTS multiplier</div>
-        </motion.div>
-
-        <motion.div
-          className="border border-foreground/10 border-l-0 p-5 text-center"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5, duration: 0.5 }}
-        >
-          <div className="text-lg font-bold text-foreground">AGENT</div>
-          <div className="font-mono text-[10px] text-muted-foreground mt-1">trustBonus = floor(HTS/10)</div>
-        </motion.div>
-      </div>
+      <ClipReveal delay={0.4} direction="up">
+        <div className="grid grid-cols-2 gap-0 w-full">
+          <div className="border border-foreground/10 p-5 text-center">
+            <div className="text-lg font-bold text-foreground">PPAP</div>
+            <div className="font-mono text-[10px] text-muted-foreground mt-1">CQS × HTS multiplier</div>
+          </div>
+          <div className="border border-foreground/10 border-l-0 p-5 text-center">
+            <div className="text-lg font-bold text-foreground">AGENT</div>
+            <div className="font-mono text-[10px] text-muted-foreground mt-1">trustBonus = floor(HTS/10)</div>
+          </div>
+        </div>
+      </ClipReveal>
 
       <motion.div
         className="font-mono text-xs text-foreground/30 py-2"
@@ -110,21 +102,18 @@ function TrustDiagram() {
         transition={{ delay: 0.7 }}
       >↓</motion.div>
 
-      <motion.div
-        className="border border-foreground/10 p-5 text-center max-w-sm w-full"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: 0.9, duration: 0.5 }}
-      >
-        <div className="text-lg font-bold text-foreground">x402 ECONOMY</div>
-        <div className="font-mono text-[10px] text-muted-foreground mt-1">Only verified agents process payments</div>
-      </motion.div>
+      <ClipReveal delay={0.8} direction="up">
+        <div className="border border-foreground/10 p-5 text-center max-w-sm w-full">
+          <div className="text-lg font-bold text-foreground">x402 ECONOMY</div>
+          <div className="font-mono text-[10px] text-muted-foreground mt-1">Only verified agents process payments</div>
+        </div>
+      </ClipReveal>
 
       <motion.p
         className="font-mono text-[10px] text-muted-foreground mt-4 text-center"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: 1.1 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ delay: 1.1, ease: SNAP }}
       >
         RULE: ONE-WAY ONLY. HUMAN → PPAP, HUMAN → AGENT. NO REVERSE.
       </motion.p>
@@ -133,40 +122,66 @@ function TrustDiagram() {
 }
 
 export default function ProtocolLanding() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* ── HERO ── */}
-      <section className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10 relative">
+      {/* ── HERO with parallax ── */}
+      <section ref={heroRef} className="pt-24 pb-16 px-6 md:px-10 border-b border-foreground/10 relative overflow-hidden">
         <div className="absolute inset-0 dot-grid-sparse opacity-40" />
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <FadeReveal>
+        <motion.div className="max-w-[1400px] mx-auto relative z-10" style={{ y: heroY, opacity: heroOpacity }}>
+          <motion.div
+            initial={{ opacity: 0, x: -30, filter: "blur(6px)" }}
+            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.4, ease: SNAP }}
+          >
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-6">
               [ PROTOCOL_OVERVIEW ]
             </div>
-          </FadeReveal>
-          <TextReveal
-            text="THE PROOF LAYER FOR AI DATA AND AGENTS."
-            as="h1"
-            className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-8 max-w-5xl uppercase tracking-tight"
-            staggerDelay={0.04}
-          />
+          </motion.div>
+          <div className="overflow-hidden">
+            <motion.h1
+              className="text-5xl md:text-7xl lg:text-[96px] font-bold text-foreground leading-[0.95] mb-2 max-w-5xl uppercase tracking-tight"
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, ease: SNAP }}
+            >
+              THE PROOF LAYER
+            </motion.h1>
+          </div>
+          <div className="overflow-hidden mb-8">
+            <motion.h1
+              className="text-5xl md:text-7xl lg:text-[96px] font-bold text-muted-foreground/30 leading-[0.95] max-w-5xl uppercase tracking-tight"
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: SNAP }}
+            >
+              FOR AI DATA AND AGENTS.
+            </motion.h1>
+          </div>
           <FadeReveal delay={0.5}>
             <p className="text-base text-muted-foreground max-w-xl leading-relaxed mb-8">
               An infrastructure protocol that cryptographically proves the provenance
               of AI training data and verifies the trust of agents.
             </p>
             <div className="flex gap-3 flex-wrap">
-              <a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
+              <motion.a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                 BUILD_WITH_HOOT
-              </a>
-              <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+              </motion.a>
+              <motion.a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                 READ_WHITEPAPER
-              </a>
+              </motion.a>
             </div>
           </FadeReveal>
-        </div>
+        </motion.div>
       </section>
 
       {/* ── WHY NOW — CAUSAL CHAIN ── */}
@@ -181,7 +196,7 @@ export default function ProtocolLanding() {
             text="THREE FAILURES."
             as="h2"
             className="text-4xl md:text-6xl font-bold text-foreground mb-4 max-w-3xl uppercase tracking-tight"
-            staggerDelay={0.04}
+            staggerDelay={0.035}
           />
           <FadeReveal delay={0.2}>
             <p className="text-base text-muted-foreground max-w-lg mb-10 font-mono">
@@ -189,24 +204,37 @@ export default function ProtocolLanding() {
             </p>
           </FadeReveal>
 
-          <div className="space-y-0 border border-foreground/10">
-            {CAUSAL_CHAIN.map((c, i) => (
-              <FadeReveal key={i} delay={i * 0.12}>
-                <div className={`p-6 md:p-8 ${i < CAUSAL_CHAIN.length - 1 ? "border-b border-foreground/10" : ""}`}>
+          <ClipReveal direction="up">
+            <div className="space-y-0 border-2 border-foreground">
+              {CAUSAL_CHAIN.map((c, i) => (
+                <motion.div
+                  key={i}
+                  className={`p-6 md:p-8 ${i < CAUSAL_CHAIN.length - 1 ? "border-b border-foreground/20" : ""}`}
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 + i * 0.12, duration: 0.5, ease: SNAP }}
+                >
                   <div className="flex items-start gap-4">
-                    <span className="font-mono text-[10px] font-bold text-destructive border border-destructive px-1.5 py-0.5 shrink-0">
+                    <motion.span
+                      className="font-mono text-[10px] font-bold text-destructive border border-destructive px-1.5 py-0.5 shrink-0"
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 + i * 0.12, ease: SNAP }}
+                    >
                       {c.num}
-                    </span>
+                    </motion.span>
                     <div>
                       <h3 className="text-lg font-bold text-foreground mb-2 uppercase tracking-tight">{c.title}</h3>
                       <p className="text-sm text-muted-foreground leading-relaxed mb-2">{c.desc}</p>
                       <p className="text-xs text-muted-foreground/70 font-mono leading-relaxed">{c.details}</p>
                     </div>
                   </div>
-                </div>
-              </FadeReveal>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          </ClipReveal>
         </div>
       </section>
 
@@ -223,59 +251,71 @@ export default function ProtocolLanding() {
             text="THREE OUTPUTS. ONE TRUST MODEL."
             as="h2"
             className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight"
-            staggerDelay={0.04}
+            staggerDelay={0.035}
           />
 
-          <div className="space-y-0 border border-foreground/10">
+          <div className="space-y-0 border-2 border-foreground">
             {OUTPUTS.map((o, i) => (
-              <FadeReveal key={i} delay={i * 0.1}>
-                <div className={`p-6 md:p-8 ${i < OUTPUTS.length - 1 ? "border-b border-foreground/10" : ""}`}>
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <div className="flex-1">
-                      <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-1">{o.subtitle}</div>
-                      <h3 className="text-2xl font-bold text-foreground mb-3 uppercase tracking-tight">{o.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{o.desc}</p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {o.specs.map((spec, j) => (
-                          <span key={j} className="font-mono text-[10px] font-bold border border-foreground/10 text-foreground px-2 py-0.5">
-                            {spec}
-                          </span>
+              <motion.div
+                key={i}
+                className={`p-6 md:p-8 ${i < OUTPUTS.length - 1 ? "border-b border-foreground/20" : ""}`}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6, ease: SNAP }}
+              >
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex-1">
+                    <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-1">{o.subtitle}</div>
+                    <h3 className="text-2xl font-bold text-foreground mb-3 uppercase tracking-tight">{o.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">{o.desc}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {o.specs.map((spec, j) => (
+                        <motion.span
+                          key={j}
+                          className="font-mono text-[10px] font-bold border border-foreground/10 text-foreground px-2 py-0.5"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.3 + j * 0.06, ease: SNAP }}
+                        >
+                          {spec}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {o.layers && (
+                    <ClipReveal delay={0.2} direction="right" className="md:w-80 shrink-0">
+                      <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider mb-2">
+                        4_DATA_LAYERS
+                      </div>
+                      <div className="border border-foreground/10">
+                        {o.layers.map((l, j) => (
+                          <div key={j} className={`flex items-center gap-3 px-3 py-2 ${j < o.layers!.length - 1 ? "border-b border-foreground/10" : ""}`}>
+                            <span className={`font-mono text-[10px] font-extrabold px-1.5 py-0.5 ${
+                              l.synth === "IMPOSSIBLE"
+                                ? "bg-foreground text-background"
+                                : "bg-secondary text-muted-foreground"
+                            }`}>
+                              {l.id}
+                            </span>
+                            <div className="flex-1">
+                              <div className="text-xs font-bold text-foreground">{l.name}</div>
+                              <div className="font-mono text-[10px] text-muted-foreground">{l.value}</div>
+                            </div>
+                            <span className={`font-mono text-[9px] font-bold ${
+                              l.synth === "IMPOSSIBLE" ? "text-destructive" : "text-muted-foreground/50"
+                            }`}>
+                              {l.synth}
+                            </span>
+                          </div>
                         ))}
                       </div>
-                    </div>
-
-                    {o.layers && (
-                      <div className="md:w-80 shrink-0">
-                        <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider mb-2">
-                          4_DATA_LAYERS
-                        </div>
-                        <div className="border border-foreground/10">
-                          {o.layers.map((l, j) => (
-                            <div key={j} className={`flex items-center gap-3 px-3 py-2 ${j < o.layers!.length - 1 ? "border-b border-foreground/10" : ""}`}>
-                              <span className={`font-mono text-[10px] font-extrabold px-1.5 py-0.5 ${
-                                l.synth === "IMPOSSIBLE"
-                                  ? "bg-foreground text-background"
-                                  : "bg-secondary text-muted-foreground"
-                              }`}>
-                                {l.id}
-                              </span>
-                              <div className="flex-1">
-                                <div className="text-xs font-bold text-foreground">{l.name}</div>
-                                <div className="font-mono text-[10px] text-muted-foreground">{l.value}</div>
-                              </div>
-                              <span className={`font-mono text-[9px] font-bold ${
-                                l.synth === "IMPOSSIBLE" ? "text-destructive" : "text-muted-foreground/50"
-                              }`}>
-                                {l.synth}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    </ClipReveal>
+                  )}
                 </div>
-              </FadeReveal>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -293,35 +333,62 @@ export default function ProtocolLanding() {
             text="ONE-WAY TRUST FLOW."
             as="h2"
             className="text-4xl md:text-6xl font-bold text-foreground mb-12 uppercase tracking-tight"
-            staggerDelay={0.04}
+            staggerDelay={0.035}
           />
           <TrustDiagram />
         </div>
       </section>
 
       {/* ── BUILD + CTA ── */}
-      <section className="py-20 px-6 md:px-10 border-b border-foreground/10">
+      <section className="py-20 px-6 md:px-10 border-b border-foreground/10 overflow-hidden">
         <div className="max-w-[1400px] mx-auto text-center">
-          <TextReveal
-            text="VERIFIED DATA. TRUSTED AGENTS. BUILT ON HOOT."
-            as="h2"
-            className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-6"
-            staggerDelay={0.05}
-          />
+          <div className="overflow-hidden">
+            <motion.h2
+              className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-2"
+              initial={{ y: 100, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: SNAP }}
+            >
+              VERIFIED DATA.
+            </motion.h2>
+          </div>
+          <div className="overflow-hidden">
+            <motion.h2
+              className="text-5xl md:text-7xl font-bold text-foreground uppercase tracking-tight mb-2"
+              initial={{ y: 100, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.08, ease: SNAP }}
+            >
+              TRUSTED AGENTS.
+            </motion.h2>
+          </div>
+          <div className="overflow-hidden mb-6">
+            <motion.h2
+              className="text-5xl md:text-7xl font-bold text-muted-foreground/30 uppercase tracking-tight"
+              initial={{ y: 100, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.16, ease: SNAP }}
+            >
+              BUILT ON HOOT.
+            </motion.h2>
+          </div>
           <FadeReveal delay={0.4}>
             <div className="flex gap-3 justify-center flex-wrap mt-8">
-              <a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors">
+              <motion.a href="#" className="px-6 py-3 bg-foreground text-background font-bold text-xs tracking-wider hover:bg-foreground/90 transition-colors" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                 DEVELOPER_DOCS
-              </a>
-              <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+              </motion.a>
+              <motion.a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                 AGENT_SDK
-              </a>
-              <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+              </motion.a>
+              <motion.a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                 WHITEPAPER
-              </a>
-              <a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors">
+              </motion.a>
+              <motion.a href="#" className="px-6 py-3 border border-foreground text-foreground font-bold text-xs tracking-wider hover:bg-foreground hover:text-background transition-colors" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
                 REQUEST_DECK
-              </a>
+              </motion.a>
             </div>
           </FadeReveal>
 
