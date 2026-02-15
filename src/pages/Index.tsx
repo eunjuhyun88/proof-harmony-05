@@ -1,4 +1,4 @@
-import { ScrollReveal, TextReveal, StaggerContainer, StaggerItem } from "@/components/hoot/ScrollReveal";
+import { ScrollReveal, TextReveal, StaggerContainer, StaggerItem, ClipReveal, CountUp } from "@/components/hoot/ScrollReveal";
 import { StrikethroughReveal, StrikethroughList, FadeReveal } from "@/components/hoot/StrikethroughReveal";
 import { StickySteps } from "@/components/hoot/StickyScroll";
 import { BrowserDemo } from "@/components/hoot/BrowserDemo";
@@ -7,6 +7,8 @@ import { Footer } from "@/components/hoot/Footer";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+
+const SNAP = [0.16, 1, 0.3, 1] as const;
 
 const PARTNERS = ["NVIDIA INCEPTION", "0G LABS", "ARBITRUM", "GOOGLE STARTUPS", "APPWORKS"];
 
@@ -27,61 +29,83 @@ const TRUST_BLOCKS = [
 
 const TECH_STACK = ["zkTLS_2PC", "FROST_5-of-5", "CQS_4-AXIS", "ERC-8004", "ARBITRUM_L2"];
 
-/* ── Hero with parallax ── */
+/* ── Hero with dramatic parallax + scale ── */
 function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
 
   return (
     <section ref={ref} className="relative h-screen flex items-center px-6 md:px-10 border-b-2 border-foreground overflow-hidden bg-foreground">
-      {/* Inverted hero — white on black */}
+      {/* Animated grid lines */}
+      <motion.div
+        className="absolute inset-0 dot-grid opacity-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.1 }}
+        transition={{ duration: 2, delay: 1.5 }}
+      />
+
       <motion.div
         className="max-w-[1400px] mx-auto w-full relative z-10"
         style={{ y, opacity, scale }}
       >
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          initial={{ opacity: 0, x: -40, filter: "blur(8px)" }}
+          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.5, delay: 0.1, ease: SNAP }}
         >
           <div className="font-mono text-[11px] text-background/50 tracking-[0.3em] mb-8">
             PROOF_PROTOCOL — V1.0
           </div>
         </motion.div>
 
-        <motion.h1
-          className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background leading-[0.9] mb-4 max-w-6xl uppercase tracking-tighter"
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-        >
-          THE PROOF
-          <br />
-          PROTOCOL
-        </motion.h1>
+        <div className="overflow-hidden">
+          <motion.h1
+            className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background leading-[0.9] mb-4 max-w-6xl uppercase tracking-tighter"
+            initial={{ y: 120, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: SNAP }}
+          >
+            THE PROOF
+          </motion.h1>
+        </div>
+        <div className="overflow-hidden">
+          <motion.h1
+            className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background leading-[0.9] mb-4 max-w-6xl uppercase tracking-tighter"
+            initial={{ y: 120, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.25, ease: SNAP }}
+          >
+            PROTOCOL
+          </motion.h1>
+        </div>
 
         <motion.div
-          className="flex items-baseline gap-4 mb-10"
+          className="flex items-baseline gap-4 mb-10 overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.5, ease: SNAP }}
         >
-          <span className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background/20 leading-[0.9] uppercase tracking-tighter">
+          <motion.span
+            className="text-6xl md:text-8xl lg:text-[120px] font-bold text-background/15 leading-[0.9] uppercase tracking-tighter"
+            initial={{ y: 80 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: SNAP }}
+          >
             FOR AI.
-          </span>
+          </motion.span>
         </motion.div>
 
         <motion.p
           className="text-lg md:text-xl text-background/60 max-w-lg leading-relaxed mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 0.7, duration: 0.6, ease: SNAP }}
         >
           Prove your data is real. Prove your agent is trustworthy.
           Own what you create.
@@ -89,32 +113,43 @@ function HeroSection() {
 
         <motion.div
           className="flex gap-3 flex-wrap"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
+          transition={{ delay: 0.85, duration: 0.5, ease: SNAP }}
         >
-          <a href="#" className="px-8 py-4 bg-background text-foreground font-bold text-xs tracking-[0.2em] hover:bg-background/90 transition-colors">
+          <motion.a
+            href="#"
+            className="px-8 py-4 bg-background text-foreground font-bold text-xs tracking-[0.2em] hover:bg-background/90 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+          >
             TRY_BROWSER
-          </a>
-          <a href="#" className="px-8 py-4 border-2 border-background/30 text-background font-bold text-xs tracking-[0.2em] hover:border-background hover:bg-background hover:text-foreground transition-all">
+          </motion.a>
+          <motion.a
+            href="#"
+            className="px-8 py-4 border-2 border-background/30 text-background font-bold text-xs tracking-[0.2em] hover:border-background hover:bg-background hover:text-foreground transition-all"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+          >
             READ_DOCS
-          </a>
+          </motion.a>
         </motion.div>
 
         <motion.div
           className="mt-16 pt-6 border-t border-background/10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.0, duration: 0.6 }}
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ delay: 1.1, duration: 0.8, ease: SNAP }}
+          style={{ transformOrigin: "left" }}
         >
           <div className="flex flex-wrap gap-8 items-center">
             {PARTNERS.map((p, i) => (
               <motion.span
                 key={p}
                 className="text-[11px] font-mono text-background/30 tracking-[0.15em]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.1 + i * 0.08 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 + i * 0.06, ease: SNAP }}
               >
                 {p}
               </motion.span>
@@ -126,9 +161,9 @@ function HeroSection() {
       {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.6, ease: SNAP }}
       >
         <span className="font-mono text-[9px] text-background/40 tracking-widest">SCROLL</span>
         <motion.div
@@ -152,24 +187,35 @@ function NarrativeSection() {
           <div className="max-w-[1400px] mx-auto">
             <motion.div
               className="font-mono text-[11px] text-destructive tracking-[0.3em] mb-6"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -30, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.4, ease: SNAP }}
             >
               CRITICAL_GAP
             </motion.div>
-            <motion.h2
-              className="text-5xl md:text-7xl lg:text-[100px] font-bold text-foreground leading-[0.9] mb-8 max-w-5xl uppercase tracking-tighter"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              YOUR AI WORK
-              <br />
-              <span className="text-muted-foreground/40">HAS NO PROOF.</span>
-            </motion.h2>
+            <div className="overflow-hidden">
+              <motion.h2
+                className="text-5xl md:text-7xl lg:text-[100px] font-bold text-foreground leading-[0.9] mb-2 max-w-5xl uppercase tracking-tighter"
+                initial={{ y: 100, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: SNAP }}
+              >
+                YOUR AI WORK
+              </motion.h2>
+            </div>
+            <div className="overflow-hidden mb-8">
+              <motion.h2
+                className="text-5xl md:text-7xl lg:text-[100px] font-bold text-muted-foreground/30 leading-[0.9] max-w-5xl uppercase tracking-tighter"
+                initial={{ y: 100, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1, ease: SNAP }}
+              >
+                HAS NO PROOF.
+              </motion.h2>
+            </div>
             <FadeReveal delay={0.2}>
               <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
                 Every day you prompt, refine, correct, and orchestrate AI tools.
@@ -182,7 +228,7 @@ function NarrativeSection() {
                   { text: "Self-declaration → Sybil-vulnerable", struck: true },
                 ]}
                 itemClassName="font-mono text-base py-2"
-                stagger={0.2}
+                stagger={0.15}
                 delay={0.2}
               />
             </FadeReveal>
@@ -197,24 +243,35 @@ function NarrativeSection() {
           <div className="max-w-[1400px] mx-auto">
             <motion.div
               className="font-mono text-[11px] text-destructive tracking-[0.3em] mb-6"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -30, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.4, ease: SNAP }}
             >
               DATA_CRISIS
             </motion.div>
-            <motion.h2
-              className="text-5xl md:text-7xl lg:text-[100px] font-bold text-foreground leading-[0.9] mb-8 max-w-5xl uppercase tracking-tighter"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              TRAINING DATA
-              <br />
-              <span className="text-muted-foreground/40">IS RUNNING OUT.</span>
-            </motion.h2>
+            <div className="overflow-hidden">
+              <motion.h2
+                className="text-5xl md:text-7xl lg:text-[100px] font-bold text-foreground leading-[0.9] mb-2 max-w-5xl uppercase tracking-tighter"
+                initial={{ y: 100, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: SNAP }}
+              >
+                TRAINING DATA
+              </motion.h2>
+            </div>
+            <div className="overflow-hidden mb-8">
+              <motion.h2
+                className="text-5xl md:text-7xl lg:text-[100px] font-bold text-muted-foreground/30 leading-[0.9] max-w-5xl uppercase tracking-tighter"
+                initial={{ y: 100, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1, ease: SNAP }}
+              >
+                IS RUNNING OUT.
+              </motion.h2>
+            </div>
             <FadeReveal delay={0.2}>
               <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
                 AI companies face a crisis: synthetic alternatives degrade models,
@@ -238,23 +295,38 @@ function NarrativeSection() {
               text="THREE PROOFS. ONE PROTOCOL."
               as="h2"
               className="text-4xl md:text-6xl lg:text-[80px] font-bold text-foreground leading-[0.95] mb-10 max-w-4xl uppercase tracking-tight"
-              staggerDelay={0.04}
+              staggerDelay={0.035}
             />
-            <FadeReveal delay={0.3}>
-              <div className="grid md:grid-cols-3 gap-0 border border-foreground/10 max-w-4xl">
+            <ClipReveal delay={0.3} direction="up">
+              <div className="grid md:grid-cols-3 gap-0 border-2 border-foreground max-w-4xl">
                 {[
                   { num: "01", title: "DATA IS REAL.", desc: "Cryptographically verified — that it happened, from a real person." },
                   { num: "02", title: "IDENTITY IS TRUSTWORTHY.", desc: "Your AI usage builds a soulbound cryptographic reputation." },
                   { num: "03", title: "AGENT IS ACCOUNTABLE.", desc: "Your trust becomes your agent's credential. Accountability traces back." },
                 ].map((p, i) => (
-                  <div key={i} className={`p-5 md:p-6 ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/10" : ""}`}>
-                    <div className="font-mono text-[10px] text-muted-foreground mb-3">{p.num}</div>
+                  <motion.div
+                    key={i}
+                    className={`p-5 md:p-6 ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/20" : ""}`}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 + i * 0.12, duration: 0.5, ease: SNAP }}
+                  >
+                    <motion.div
+                      className="font-mono text-[10px] text-muted-foreground mb-3"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5 + i * 0.12, ease: SNAP }}
+                    >
+                      {p.num}
+                    </motion.div>
                     <h3 className="text-sm font-bold text-foreground mb-2 uppercase tracking-tight">{p.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </FadeReveal>
+            </ClipReveal>
           </div>
         </div>
       ),
@@ -285,20 +357,42 @@ function ScenariosSection() {
               text="SARAH USES AI EVERY DAY."
               as="h2"
               className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight"
-              staggerDelay={0.04}
+              staggerDelay={0.035}
             />
             <FadeReveal delay={0.3}>
               <p className="text-lg text-muted-foreground mb-8">Now her work has proof.</p>
             </FadeReveal>
-            <FadeReveal delay={0.4}>
-              <div className="grid md:grid-cols-2 gap-0 border border-foreground/10 max-w-4xl">
-                <div className="p-5 md:border-r border-b md:border-b-0 border-foreground/10">
-                  <div className="font-mono text-[10px] font-bold text-hoot-green tracking-wider mb-3">● SESSION_VERIFIED</div>
+            <ClipReveal delay={0.4} direction="left">
+              <div className="grid md:grid-cols-2 gap-0 border-2 border-foreground max-w-4xl">
+                <div className="p-5 md:border-r border-b md:border-b-0 border-foreground/20">
+                  <motion.div
+                    className="font-mono text-[10px] font-bold text-hoot-green tracking-wider mb-3"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    ● SESSION_VERIFIED
+                  </motion.div>
                   <div className="space-y-2 text-sm text-foreground">
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Cryptographically proven <span className="ml-auto font-mono text-[10px] border border-foreground/10 px-1.5 py-0.5">zkTLS</span></div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Quality-scored <span className="ml-auto font-mono text-[10px] border border-foreground/10 px-1.5 py-0.5">GOLD</span></div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Registered on-chain as Sarah's</div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Encrypted. Only Sarah holds the key.</div>
+                    {[
+                      { label: "Cryptographically proven", tag: "zkTLS" },
+                      { label: "Quality-scored", tag: "GOLD" },
+                      { label: "Registered on-chain as Sarah's", tag: "" },
+                      { label: "Encrypted. Only Sarah holds the key.", tag: "" },
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.7 + i * 0.08, ease: SNAP }}
+                      >
+                        <span className="text-hoot-green font-bold">✓</span> {item.label}
+                        {item.tag && <span className="ml-auto font-mono text-[10px] border border-foreground/10 px-1.5 py-0.5">{item.tag}</span>}
+                      </motion.div>
+                    ))}
                   </div>
                   <div className="mt-4 pt-3 border-t border-foreground/10 font-mono text-[10px] text-muted-foreground">
                     MONETIZATION: <span className="font-bold text-foreground">OFF</span>
@@ -313,7 +407,7 @@ function ScenariosSection() {
                   </p>
                 </div>
               </div>
-            </FadeReveal>
+            </ClipReveal>
           </div>
         </div>
       ),
@@ -330,17 +424,30 @@ function ScenariosSection() {
               text="JAE NEEDS DATA HE CAN TRUST."
               as="h2"
               className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight"
-              staggerDelay={0.04}
+              staggerDelay={0.035}
             />
-            <FadeReveal delay={0.3}>
-              <div className="grid md:grid-cols-2 gap-0 border border-foreground/10 max-w-4xl">
-                <div className="p-5 md:border-r border-b md:border-b-0 border-foreground/10">
+            <ClipReveal delay={0.3} direction="right">
+              <div className="grid md:grid-cols-2 gap-0 border-2 border-foreground max-w-4xl">
+                <div className="p-5 md:border-r border-b md:border-b-0 border-foreground/20">
                   <div className="font-mono text-[10px] font-bold text-muted-foreground tracking-wider mb-2">EVERY DATASET HERE IS:</div>
                   <div className="space-y-2 text-sm text-foreground">
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Created by a verified human</div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> From a real AI session (zkTLS proof)</div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Quality-scored by independent nodes</div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> With full provenance trail</div>
+                    {[
+                      "Created by a verified human",
+                      "From a real AI session (zkTLS proof)",
+                      "Quality-scored by independent nodes",
+                      "With full provenance trail",
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5 + i * 0.08, ease: SNAP }}
+                      >
+                        <span className="text-hoot-green font-bold">✓</span> {item}
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
                 <div className="p-5 flex flex-col justify-center">
@@ -352,7 +459,7 @@ function ScenariosSection() {
                   </p>
                 </div>
               </div>
-            </FadeReveal>
+            </ClipReveal>
           </div>
         </div>
       ),
@@ -369,23 +476,36 @@ function ScenariosSection() {
               text="MIN BUILDS AGENTS."
               as="h2"
               className="text-4xl md:text-6xl font-bold text-foreground mb-4 uppercase tracking-tight"
-              staggerDelay={0.04}
+              staggerDelay={0.035}
             />
             <FadeReveal delay={0.2}>
               <p className="text-lg text-muted-foreground mb-8">Now they carry his reputation.</p>
             </FadeReveal>
-            <FadeReveal delay={0.3}>
-              <div className="grid md:grid-cols-2 gap-0 border border-foreground/10 max-w-4xl">
-                <div className="p-5 md:border-r border-b md:border-b-0 border-foreground/10">
+            <ClipReveal delay={0.3} direction="up">
+              <div className="grid md:grid-cols-2 gap-0 border-2 border-foreground max-w-4xl">
+                <div className="p-5 md:border-r border-b md:border-b-0 border-foreground/20">
                   <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-1">MIN'S HUMANPASSPORT</div>
                   <div className="flex items-center gap-3 mt-2 mb-3">
                     <span className="font-mono text-[10px] font-bold border border-hoot-green text-hoot-green px-1.5 py-0.5">GOLD</span>
                     <span className="text-sm text-foreground">Trust Score: <span className="font-bold">82</span></span>
                   </div>
                   <div className="space-y-1.5 text-sm text-foreground border-t border-foreground/10 pt-3">
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Code verified</div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Security scanned</div>
-                    <div className="flex items-center gap-2"><span className="text-hoot-green font-bold">✓</span> Trust inherited from Min: +8</div>
+                    {[
+                      "Code verified",
+                      "Security scanned",
+                      "Trust inherited from Min: +8",
+                    ].map((item, i) => (
+                      <motion.div
+                        key={i}
+                        className="flex items-center gap-2"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5 + i * 0.08, ease: SNAP }}
+                      >
+                        <span className="text-hoot-green font-bold">✓</span> {item}
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
                 <div className="p-5 flex flex-col justify-center">
@@ -400,7 +520,7 @@ function ScenariosSection() {
                   </Link>
                 </div>
               </div>
-            </FadeReveal>
+            </ClipReveal>
           </div>
         </div>
       ),
@@ -416,10 +536,21 @@ function ScenariosSection() {
   );
 }
 
-/* ── Trust Model — bold visual block ── */
+/* ── Trust Model — bold visual block with stagger ── */
 function TrustModelSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "start start"],
+  });
+  const bgScale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
+
   return (
-    <section className="py-24 px-6 md:px-10 border-b-2 border-foreground relative bg-foreground text-background">
+    <motion.section
+      ref={ref}
+      className="py-24 px-6 md:px-10 border-b-2 border-foreground relative bg-foreground text-background overflow-hidden"
+      style={{ scale: bgScale }}
+    >
       <div className="max-w-[1400px] mx-auto relative z-10">
         <FadeReveal>
           <div className="font-mono text-[11px] text-background/40 tracking-[0.3em] mb-4">TRUST_MODEL</div>
@@ -429,7 +560,7 @@ function TrustModelSection() {
           text="TRUST FLOWS ONE DIRECTION."
           as="h2"
           className="text-4xl md:text-7xl font-bold text-background mb-6 uppercase tracking-tighter max-w-4xl"
-          staggerDelay={0.04}
+          staggerDelay={0.035}
         />
 
         <FadeReveal delay={0.3}>
@@ -440,21 +571,26 @@ function TrustModelSection() {
         </FadeReveal>
 
         <div className="max-w-2xl mx-auto">
-          <FadeReveal>
+          <ClipReveal direction="up">
             <div className="border-2 border-background p-8 text-center">
               <div className="font-mono text-[11px] text-background/40 tracking-[0.2em]">ENTITY</div>
-              <div className="text-4xl font-bold text-background uppercase tracking-tighter">HUMAN</div>
+              <CountUp value="HUMAN" className="text-4xl font-bold text-background uppercase tracking-tighter block" delay={0.2} />
               <div className="font-mono text-[11px] text-background/40 mt-2">Creates trust</div>
             </div>
-          </FadeReveal>
+          </ClipReveal>
 
-          <FadeReveal delay={0.2}>
-            <div className="text-center py-3 text-background/20 text-2xl font-bold">
-              ↓
-            </div>
-          </FadeReveal>
+          <motion.div
+            className="text-center py-3 text-background/20 text-2xl font-bold"
+            initial={{ opacity: 0, scaleY: 0 }}
+            whileInView={{ opacity: 1, scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, ease: SNAP }}
+            style={{ transformOrigin: "top" }}
+          >
+            ↓
+          </motion.div>
 
-          <FadeReveal delay={0.3}>
+          <ClipReveal delay={0.4} direction="up">
             <div className="grid grid-cols-2 gap-0">
               <div className="border border-background/20 p-6 text-center">
                 <div className="text-xl font-bold text-background uppercase tracking-tight">DATA</div>
@@ -465,16 +601,20 @@ function TrustModelSection() {
                 <div className="font-mono text-[10px] text-background/30 mt-1">trustBonus = floor(HTS/10)</div>
               </div>
             </div>
-          </FadeReveal>
+          </ClipReveal>
 
-          <FadeReveal delay={0.4}>
-            <div className="font-mono text-[11px] text-background/30 text-center mt-6 tracking-wider">
-              RULE: ONE-WAY ONLY. NO REVERSE INHERITANCE.
-            </div>
-          </FadeReveal>
+          <motion.div
+            className="font-mono text-[11px] text-background/30 text-center mt-6 tracking-wider"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, ease: SNAP }}
+          >
+            RULE: ONE-WAY ONLY. NO REVERSE INHERITANCE.
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -493,10 +633,16 @@ export default function Index() {
           <FadeReveal>
             <div className="font-mono text-[10px] text-muted-foreground tracking-wider mb-4">[ UNDER_THE_HOOD ]</div>
           </FadeReveal>
-          <StaggerContainer className="flex flex-wrap gap-2 mb-4" stagger={0.08}>
+          <StaggerContainer className="flex flex-wrap gap-2 mb-4" stagger={0.06}>
             {TECH_STACK.map((t) => (
               <StaggerItem key={t}>
-                <span className="font-mono text-xs font-bold text-foreground border border-foreground/10 px-3 py-1.5 inline-block">{t}</span>
+                <motion.span
+                  className="font-mono text-xs font-bold text-foreground border border-foreground/10 px-3 py-1.5 inline-block"
+                  whileHover={{ scale: 1.1, borderColor: "hsl(var(--foreground))" }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {t}
+                </motion.span>
               </StaggerItem>
             ))}
           </StaggerContainer>
@@ -522,48 +668,76 @@ export default function Index() {
             text="ONE COMMAND, VERIFIED PROOF."
             as="h2"
             className="text-4xl md:text-6xl font-bold text-foreground mb-2 uppercase tracking-tight"
-            staggerDelay={0.04}
+            staggerDelay={0.035}
           />
           <FadeReveal delay={0.3}>
             <p className="text-base text-muted-foreground max-w-lg mb-10">
               Watch a real orchestration — and see how every interaction becomes cryptographically yours.
             </p>
           </FadeReveal>
-          <FadeReveal delay={0.4}>
+          <FadeReveal delay={0.4} scale>
             <BrowserDemo />
           </FadeReveal>
         </div>
       </section>
 
       {/* ── CTA ── */}
-      <section id="waitlist" className="py-28 px-6 md:px-10 border-b-2 border-foreground">
+      <section id="waitlist" className="py-28 px-6 md:px-10 border-b-2 border-foreground overflow-hidden">
         <div className="max-w-[1400px] mx-auto text-center">
-          <motion.h2
-            className="text-5xl md:text-8xl lg:text-[110px] font-bold text-foreground uppercase tracking-tighter mb-4 leading-[0.9]"
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            YOUR DATA.
-            <br />
-            YOUR PROOF.
-          </motion.h2>
+          <div className="overflow-hidden">
+            <motion.h2
+              className="text-5xl md:text-8xl lg:text-[110px] font-bold text-foreground uppercase tracking-tighter mb-2 leading-[0.9]"
+              initial={{ y: 120, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: SNAP }}
+            >
+              YOUR DATA.
+            </motion.h2>
+          </div>
+          <div className="overflow-hidden mb-4">
+            <motion.h2
+              className="text-5xl md:text-8xl lg:text-[110px] font-bold text-foreground uppercase tracking-tighter leading-[0.9]"
+              initial={{ y: 120, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1, ease: SNAP }}
+            >
+              YOUR PROOF.
+            </motion.h2>
+          </div>
           <FadeReveal delay={0.3}>
             <div className="flex gap-3 justify-center flex-wrap mt-10">
-              <a href="#" className="px-10 py-4 bg-foreground text-background font-bold text-xs tracking-[0.2em] hover:bg-foreground/90 transition-colors">
+              <motion.a
+                href="#"
+                className="px-10 py-4 bg-foreground text-background font-bold text-xs tracking-[0.2em] hover:bg-foreground/90 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+              >
                 TRY_BROWSER
-              </a>
-              <a href="#" className="px-10 py-4 border-2 border-foreground text-foreground font-bold text-xs tracking-[0.2em] hover:bg-foreground hover:text-background transition-all">
+              </motion.a>
+              <motion.a
+                href="#"
+                className="px-10 py-4 border-2 border-foreground text-foreground font-bold text-xs tracking-[0.2em] hover:bg-foreground hover:text-background transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+              >
                 READ_DOCS
-              </a>
+              </motion.a>
             </div>
           </FadeReveal>
 
-          <StaggerContainer className="mt-12 grid md:grid-cols-3 gap-0 border border-foreground/10" stagger={0.12} delay={0.3}>
-            {TRUST_BLOCKS.map((block, i) => (
-              <StaggerItem key={i}>
-                <div className={`p-5 text-left ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/10" : ""}`}>
+          <ClipReveal delay={0.4} direction="up">
+            <div className="mt-12 grid md:grid-cols-3 gap-0 border-2 border-foreground">
+              {TRUST_BLOCKS.map((block, i) => (
+                <motion.div
+                  key={i}
+                  className={`p-5 text-left ${i < 2 ? "md:border-r border-b md:border-b-0 border-foreground/20" : ""}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 + i * 0.1, ease: SNAP }}
+                >
                   <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">{block.title}</h3>
                   <ul className="space-y-1.5">
                     {block.items.map((item, j) => (
@@ -573,10 +747,10 @@ export default function Index() {
                       </li>
                     ))}
                   </ul>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+                </motion.div>
+              ))}
+            </div>
+          </ClipReveal>
         </div>
       </section>
 
